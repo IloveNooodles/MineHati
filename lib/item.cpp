@@ -39,4 +39,5 @@ bool Item::getisTool() const
 void Item::setisTool(bool isTool)
 {
   this->isTool = isTool;
+  
 }

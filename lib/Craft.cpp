@@ -3,16 +3,12 @@
 
 Craft::Craft() : Menu() {
     this->capacity = 9;
-    for (int i = 0;i < 3;i++) {
-        this->storage[i] = new pair<int,int>[3];
-        for (int j = 0; j < 3;j++) {
-            storage[i][j] = make_pair(i,j);
-        }
+    this->storage = new Slot[9];
+    for (int i = 0;i < 9;i++) {
+        storage[i] = Slot("I" + to_string(i), Item(), 0);
     }
 }
 
 Craft::~Craft() {
-    for (int i = 0; i < 3; i++) {
-        delete[] this->storage[i];
-    }
+    delete[] this->storage;
 }

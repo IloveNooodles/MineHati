@@ -2,16 +2,64 @@
 
 Inventory::Inventory() : Menu() {
     this->capacity = 27;
-    for (int i = 0;i < 3;i++) {
-        this->storage[i] = new pair<int,int>[9];
-        for (int j = 0; j < 9;j++) {
-            storage[i][j] = make_pair(i,j);
-        }
+    this->storage = new Slot[27];
+    for (int i = 0;i < 27;i++) {
+        storage[i] = Slot("I" + to_string(i), Item(), 0);
     }
 }
 
 Inventory::~Inventory() {
-    for (int i = 0; i < 3; i++) {
-        delete[] this->storage[i];
+    delete[] this->storage;
+}
+
+void Inventory::Add(string Name, int b) {
+    Slot el;
+    for(int i = 0; i < 27; i++) {
+        el = this->storage[i];
+        if (el.getItem().getName() == Name && el.getQuantity() + b <= 64) {
+            this->storage[i].setQuantity(el.getQuantity() + b);
+            return;
+        }
     }
+    // tidak ditemukan slot sesuai ketentuan, cari slot kosong
+    for(int i = 0; i < 27; i++) {
+        el = this->storage[i];
+        if (el.getItem().getName() == "none") {
+            // TODO setItem belum tau gmn
+            this->storage[i].setQuantity(b);
+            return;
+        }
+    }
+    throw ("Slot kosong tidak ditemukan");
+}
+
+void Inventory::Discard(string Id, int quantity) {
+    for(int i = 0; i < 27; i++) {
+        if (this->storage[i].getId() == Id) {
+            if (quantity > this->storage[i].getQuantity()) {
+                throw ("Jumlah yang dibuang melebihi kuantitas");
+            }
+            else {
+                this->storage[i].setQuantity(this->storage[i].getQuantity() - quantity);
+                if (this->storage[i].getQuantity() == 0) {
+                    this->storage[i].setItem(Item());
+                }
+            }
+            return;
+        }
+    }    
+}
+
+void Inventory::Use(string id) {
+    for(int i = 0; i < 27; i++) {
+        if (this->storage[i].getId() == id) {
+            if (this->storage[i].getItem().getisTool() == false) {
+                throw ("Item yang dipakai bukan tool");
+            }
+            else {
+                // TODO ubah tools belum tau gmn (gabisa manggil method durability)
+            }
+            return;
+        }
+    }    
 }
