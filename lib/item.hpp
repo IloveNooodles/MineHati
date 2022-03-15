@@ -31,39 +31,15 @@ protected:
   bool isTool;
 
 public:
-  virtual void init() = 0;
-  int getId() const
-  {
-    return this->id;
-  }
-  void setId(int id)
-  {
-    this->id = id;
-  }
-  string getName() const
-  {
-    return this->name;
-  }
-  void setName(string name)
-  {
-    this->name = name;
-  }
-  string getCategory() const
-  {
-    return this->category;
-  }
-  void setCategory(string category)
-  {
-    this->category = category;
-  }
-  bool getisTool() const
-  {
-    return this->isTool;
-  }
-  void setisTool(bool isTool)
-  {
-    this->isTool = isTool;
-  }
+  virtual void init();
+  int getId() const;
+  void setId(int id);
+  string getName() const;
+  void setName(string name);
+  string getCategory() const;
+  void setCategory(string category);
+  bool getisTool() const;
+  void setisTool(bool isTool);
 };
 
 #endif
