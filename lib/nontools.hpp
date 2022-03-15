@@ -1,7 +1,7 @@
+#include "Item.hpp"
+
 #ifndef __NONTOOLS_HPP_
 #define __NONTOOLS_HPP_
-
-#include "item.hpp"
 
 class Nontools : public Item
 {
