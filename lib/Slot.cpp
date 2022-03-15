@@ -23,6 +23,9 @@ void Slot::setItem(Item item) {
     this->item = item;
 }
 void Slot::setQuantity(int quantity) {
+    if (quantity < 0) {
+        throw ("non-positive integer");
+    }
     this->quantity = quantity;
 }
 void Slot::setId(string id) {

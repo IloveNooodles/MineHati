@@ -4,7 +4,7 @@ Inventory::Inventory() : Menu() {
     this->capacity = 27;
     this->storage = new Slot[27];
     for (int i = 0;i < 27;i++) {
-        storage[i] = Slot("I" + to_string(i), Item(), 0);
+        storage[i] = Slot("I" + to_string(i), Nontools(), 0);
     }
 }
 
@@ -14,6 +14,9 @@ Inventory::~Inventory() {
 
 void Inventory::Add(string Name, int b) {
     Slot el;
+    if (b <= 0) {
+        throw ("non-positive integer");
+    }
     for(int i = 0; i < 27; i++) {
         el = this->storage[i];
         if (el.getItem().getName() == Name && el.getQuantity() + b <= 64) {
@@ -34,6 +37,9 @@ void Inventory::Add(string Name, int b) {
 }
 
 void Inventory::Discard(string Id, int quantity) {
+    if (quantity <= 0) {
+        throw ("non-positive integer");
+    }
     for(int i = 0; i < 27; i++) {
         if (this->storage[i].getId() == Id) {
             if (quantity > this->storage[i].getQuantity()) {
@@ -42,12 +48,13 @@ void Inventory::Discard(string Id, int quantity) {
             else {
                 this->storage[i].setQuantity(this->storage[i].getQuantity() - quantity);
                 if (this->storage[i].getQuantity() == 0) {
-                    this->storage[i].setItem(Item());
+                    this->storage[i].setItem(Nontools());
                 }
             }
             return;
         }
-    }    
+    }
+    throw ("Id tidak ditemukan");    
 }
 
 void Inventory::Use(string id) {
@@ -62,4 +69,5 @@ void Inventory::Use(string id) {
             return;
         }
     }    
+    throw ("Id tidak ditemukan");   
 }
