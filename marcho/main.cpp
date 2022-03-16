@@ -240,7 +240,7 @@ class Inventory {
       }
     }
     void printInventory() {
-      int slot = 1;
+      int slot = 0;
       for (int i = 0; i < 3; i ++) {
         for (int j = 0; j < 9; j ++) {
           if (invMatrix[i][j]->getQty() > 0) {
@@ -295,7 +295,7 @@ class Inventory {
     void discardItem(int slot, int qty) {
       /* Konversi slot ke [row][col] */
       int row = 0; int col = 0;
-      while (slot > 1) {
+      while (slot > 0) {
         slot --;
         col ++;
         if (col == 9) {
@@ -332,9 +332,21 @@ class Crafting {
     }
 
     void printCrafting() {
+      int slot = 0;
       for (int i = 0; i < 3; i ++) {
         for (int j = 0; j < 3; j ++) {
-          cout << "[I" << setw(2) << getItemID(*craftingMatrix[i][j]) << "] ";
+          if (craftingMatrix[i][j]->getQty() > 0) {
+            /* Nontool */
+            cout << "[" << setfill('0') << setw(2) << slot << "> " << craftingMatrix[i][j]->nama << ":" << craftingMatrix[i][j]->getQty() << "] ";
+          }
+          if (craftingMatrix[i][j]->getDurability() > 0) {
+            /* Tool */
+            cout << "[" << setfill('0') << setw(2) << slot << "> " << craftingMatrix[i][j]->nama << ":" << craftingMatrix[i][j]->getDurability() << "/10] ";
+          }
+          if (craftingMatrix[i][j]->nama == "N/A") {
+            cout << "[" << setfill('0') << setw(2) << slot << "> " << "EMPTY" << "] ";
+          }
+          slot ++;
         }
         cout << endl;
       }
@@ -359,9 +371,10 @@ int main() {
       cin >> itemName >> qty;
       i.giveItem(itemName, qty);
     } else if (input == "DISCARD") {
-      int slot; int qty;
+      string slot; int qty;
       cin >> slot >> qty;
-      i.discardItem(slot, qty);
+      int iSlot = stoi(slot.substr(1));
+      i.discardItem(iSlot, qty);
     }
   }
 
