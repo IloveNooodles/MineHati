@@ -1,11 +1,12 @@
 #ifndef __NONTOOLS_HPP_
 #define __NONTOOLS_HPP_
-#include "Item.hpp"
+#include "item.hpp"
 
 class Nontools : public Item
 {
 private:
   int quantity;
+
 public:
   Nontools();
   Nontools(int, string, string, int);

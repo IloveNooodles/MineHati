@@ -1,16 +1,16 @@
-#include "Tools.hpp"
+#include "tools.hpp"
 
 Tools::Tools() : Item()
 {
   this->durability = -999;
 }
 
-Tools::Tools(int id, string name, string category, int durability) : Item(id,name,category)
+Tools::Tools(int id, string name, string category, int durability) : Item(id, name, category)
 {
   this->durability = durability;
 }
 
-Tools::Tools(int id, string name, int durability) : Item(id,name)
+Tools::Tools(int id, string name, int durability) : Item(id, name)
 {
   this->durability = durability;
 }
@@ -23,7 +23,8 @@ Tools::Tools(const Tools &anotherTools)
   this->durability = anotherTools.durability;
 }
 
-string Tools::print() const {
+string Tools::print() const
+{
   return (this->getName() + " [" + to_string(this->getDurability()) + "/10]");
 }
 int Tools::getQuantity() const
@@ -39,6 +40,7 @@ void Tools::decreaseDurability(int durability)
 {
   this->durability -= durability;
 }
-bool Tools::isTool() {
-    return true;
+bool Tools::isTool()
+{
+  return true;
 }

@@ -1,6 +1,6 @@
 #ifndef __TOOLS_HPP_
 #define __TOOLS_HPP_
-#include "Item.hpp"
+#include "item.hpp"
 
 // durability 0;
 

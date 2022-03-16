@@ -1,4 +1,4 @@
-#include "Item.hpp"
+#include "item.hpp"
 
 Item::Item()
 {
@@ -6,12 +6,14 @@ Item::Item()
   this->name = "-";
   this->category = "-";
 }
-Item::Item(int id,string nama, string jenis) {
+Item::Item(int id, string nama, string jenis)
+{
   this->id = id;
   this->name = nama;
   this->category = jenis;
 }
-Item::Item(int id,string nama) {
+Item::Item(int id, string nama)
+{
   this->id = id;
   this->name = nama;
   this->category = "-";
