@@ -12,6 +12,10 @@ int main () {
     ayam->give(items,"DIAMOND_AXE",11,7);
     ayam->Show();
     cout<<endl;
+    string dest[3] = {"C1", "C2", "C5"};
+    ayam->MoveToCraft("I1", 3, dest);
+    ayam ->Show();
+    cout<<endl;
     
     
 }

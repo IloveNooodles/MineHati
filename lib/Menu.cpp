@@ -18,6 +18,30 @@ Menu::Menu() {
 Menu::~Menu() {
     cout << "Destroy matrix" << endl;
 }
+void Menu::MoveToCraft(string src, int n, string* dest)
+{
+    int i = stoi(src.substr(1));
+    if (i < 0 || i > 26) {
+        throw ("Id tidak ditemukan"); 
+    }
+    if(this->storage[i].first->getQuantity()<1)
+    {
+        throw("Not available");
+    }
+    for(int k=0; k<n; k++)
+    {
+        int j = stoi(dest[k].substr(1));
+        if(this->craftingGrid[j].first->getName() != "-")
+        {
+            throw("salah satu petak telah terisi");
+        }
+        this->craftingGrid[j].first = this->storage[i].first;
+        this->craftingGrid[j].first->addQuantity(1);
+        this->storage[i].first->addQuantity(-1);
+        
+        
+    }
+}
 void Menu::Export() {}
 void Menu::Show() {
     for (int i = 0;i < 3;i++) { //craftingGrid
