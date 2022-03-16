@@ -21,6 +21,7 @@ public:
   void setCapacity();
   virtual ~Menu();
   void MoveToCraft(string src, int n, string* dest);
+  void MoveFromCraft(string src, string dest);
   void Export();
   void Show();
 };
