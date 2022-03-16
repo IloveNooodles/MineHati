@@ -28,7 +28,7 @@ void Inventory::Add(string Name, int b) {
     for(int i = 0; i < 27; i++) {
         el = this->storage[i];
         if (el.getItem().getName() == "none") {
-            // TODO setItem belum tau gmn
+            this->storage[i].setItem(Nontools(1,Name,"wood")); //TODO masih coba coba
             this->storage[i].setQuantity(b);
             return;
         }
