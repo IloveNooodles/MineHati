@@ -7,7 +7,6 @@
 class Crafting : public Menu
 {
 public:
-  Crafting();
   virtual ~Crafting();
   void Craft();
 };

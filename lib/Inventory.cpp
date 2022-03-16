@@ -1,12 +1,5 @@
 #include "Inventory.hpp"
 
-Inventory::Inventory() : Menu() {
-    this->capacity = 27;
-    this->storage = new pair<Item*,string>[27];
-    for (int i = 0;i < 27;i++) {
-        this->storage[i] = make_pair(new Nontools(),"I" + to_string(i));
-    }
-}
 
 Inventory::~Inventory() {
     delete[] this->storage;
@@ -27,7 +20,8 @@ void Inventory::Add(string Name, int b) {
     for(int i = 0; i < 27; i++) {
         Item *el = this->storage[i].first;
         if (el->getName() == "none") {
-            this->storage[i] = make_pair(new Tools(1,Name,"wood",b),this->storage[i].second); //TODO masih coba coba
+            this->storage[i] = make_pair(new Nontools(1,Name,"wood",b),this->storage[i].second); //TODO masih coba coba
+            //gw izin bikin jadi nontools
             return;
         }
     }
