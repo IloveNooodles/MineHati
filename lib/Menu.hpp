@@ -11,7 +11,9 @@ class Menu
 {
 protected:
   pair<Item*,string> *storage;
+  pair<Item*,string> *craftingGrid;
   int capacity;
+  int craftingCapacity;
 
 public:
   Menu();
@@ -19,7 +21,7 @@ public:
   void setCapacity();
   virtual ~Menu();
   void Export();
-  void Move();
+  void Move(int slot, int dest);
   void Show();
 };
 #endif

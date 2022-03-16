@@ -6,7 +6,9 @@ Menu::~Menu() {
     cout << "Destroy matrix" << endl;
 }
 void Menu::Export() {}
-void Menu::Move() {}
+void Menu::Move(int slot, int dest) {
+    
+}
 void Menu::Show() {
     for (int i = 0;i < 3;i++) {
         for (int j = 0; j < this->capacity/3;j++) {

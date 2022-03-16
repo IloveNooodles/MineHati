@@ -1,6 +1,10 @@
 #include "Inventory.hpp"
+#include "Crafting.hpp"
 
 int main () {
+    // ItemsReader items;
+    // RecipesReader recipes;
+    Crafting *c = new Crafting();
     Inventory *ayam = new Inventory();
     ayam->Add("ayam",4);
     ayam->Add("ayam",8);
