@@ -9,13 +9,12 @@ private:
 public:
   Nontools();
   Nontools(int, string, string, int);
+  Nontools(int, string, int);
   Nontools(const Nontools &);
-  ~Nontools();
   string print() const;
   int getQuantity() const;
-  void setQuantity(int);
-  int getDurability() const;
-  void setDurability(int);
+  void addQuantity(int);
+  bool isNontool();
 };
 
 #endif

@@ -28,24 +28,24 @@ protected:
   int id;
   string name;
   string category;
-  bool isTool;
 
 public:
   Item();
-  virtual ~Item();
+  Item(int, string, string);
+  Item(int, string);
   int getId() const;
   void setId(int id);
   string getName() const;
   void setName(string name);
   string getCategory() const;
   void setCategory(string category);
-  bool getisTool() const;
-  void setisTool(bool isTool);
-  virtual string print() const = 0;
-  virtual int getQuantity() const = 0;
-  virtual void setQuantity(int) = 0;
-  virtual int getDurability() const = 0;
-  virtual void setDurability(int) = 0;
+  virtual string print() const {return "EMPTY";}
+  virtual int getQuantity() const {return -999;}
+  virtual void addQuantity(int) {}
+  virtual int getDurability() const {return -999;}
+  virtual void decreaseDurability(int) {}
+  virtual bool isNontool() { return false; }
+  virtual bool isTool() { return false; }
 };
 
 #endif
