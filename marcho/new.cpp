@@ -98,6 +98,48 @@ class Tool : public Item {
     }
 };
 
+
+class Crafting {
+  private:
+    friend class Nontool;
+    friend class Tool;
+    vector<vector<Item*>> cMatrix;
+  public:
+    Crafting() {
+      for (int i = 0; i < 3; i ++) {
+        vector<Item*> tmp;
+        for (int j = 0; j < 3; j ++) {
+          tmp.push_back(new Item());
+        }
+        cMatrix.push_back(tmp);
+      }
+    }
+    void print() {
+      int slot = 0;
+      for (int i = 0; i < 3; i ++) {
+        for (int j = 0; j < 3; j ++) {
+          if (cMatrix[i][j]->getName() != "-") {
+            if (cMatrix[i][j]->isNontool()) {
+              cout << "[C" << setw(2) << slot << "> " << cMatrix[i][j]->getName() << ":" << cMatrix[i][j]->getQty() << "] ";
+            } else {
+              cout << "[C" << setw(2) << slot << "> " << cMatrix[i][j]->getName() << ":" << cMatrix[i][j]->getDura() << "/10] ";
+            }
+          } else {
+            cout << "[C" << setw(2) << slot << "> EMPTY] ";
+          }
+          slot ++;
+        }
+        cout << endl;
+      }
+    }
+    void setMatrix(int i, int j, Item* value) {
+      cMatrix[i][j] = value;
+    }
+    Item* getElement(int i, int j) {
+      return cMatrix[i][j];
+    }
+};
+
 class Inventory {
   private:
     vector<vector<Item*>> invMatrix;
@@ -208,40 +250,68 @@ class Inventory {
         invMatrix[i][j] = new Item();
       }
     }
-};
-
-class Crafting {
-  private:
-    friend class Nontool;
-    friend class Tool;
-    vector<vector<Item*>> cMatrix;
-  public:
-    Crafting() {
-      for (int i = 0; i < 3; i ++) {
-        vector<Item*> tmp;
-        for (int j = 0; j < 3; j ++) {
-          tmp.push_back(new Item());
+    void moveToCraft(ItemsReader& items, Crafting& c, int slot, int dest) {
+      int i, j; /* Index untuk inventory */
+      j = slot % 9;
+      i = slot / 9;
+      int k, l; /* Index untuk crafting */
+      l = dest % 3;
+      k = dest / 3;
+      /* Lihat inventory yang akan diambil */
+      if (items.getCtg(invMatrix[i][j]->getName()) == "TOOL") {
+        /* Jika tool, */
+        c.setMatrix(k, l, invMatrix[i][j]);
+        invMatrix[i][j] = new Item();
+      } else {
+        /* Jika nontool, */
+        string name = invMatrix[i][j]->getName();
+        c.setMatrix(k, l, new Nontool(name, items.getType(name), 1));
+        invMatrix[i][j]->addQty(-1);
+        if (invMatrix[i][j]->getQty() == 0) {
+          invMatrix[i][j] = new Item();
         }
-        cMatrix.push_back(tmp);
       }
     }
-    void print() {
-      int slot = 0;
-      for (int i = 0; i < 3; i ++) {
-        for (int j = 0; j < 3; j ++) {
-          if (cMatrix[i][j]->getName() != "-") {
-            if (cMatrix[i][j]->isNontool()) {
-              cout << "[C" << setw(2) << slot << "> " << cMatrix[i][j]->getName() << ":" << cMatrix[i][j]->getQty() << "] ";
-            } else {
-              cout << "[C" << setw(2) << slot << "> " << cMatrix[i][j]->getName() << ":" << cMatrix[i][j]->getDura() << "/10] ";
-            }
-          } else {
-            cout << "[C" << setw(2) << slot << "> EMPTY] ";
-          }
-          slot ++;
-        }
-        cout << endl;
+    void moveToInventory(int slot, int dest) {
+      int i, j; /* Index untuk src */
+      j = slot % 9;
+      i = slot / 9;
+      int k, l; /* Index untuk dest */
+      k = dest % 9;
+      l = dest / 9;
+      int sisa = 64 - invMatrix[k][l]->getQty();
+      if (invMatrix[i][j]->getQty() <= sisa) {
+        /* invMatrix[i][j] habis */
+        invMatrix[k][l]->addQty(invMatrix[i][j]->getQty());
+        invMatrix[i][j] = new Item();
+      } else {
+        invMatrix[k][l]->addQty(sisa);
+        invMatrix[i][j]->addQty(-1 * sisa);
       }
+    }
+    void moveFromCraft(ItemsReader& items, Crafting& c, int slot, int dest) {
+      int i, j; /* Index untuk crafting */
+      j = slot % 3;
+      i = slot / 3;
+      int k, l; /* Index untuk inventory */
+      l = dest % 9;
+      k = dest / 9;
+      string name = c.getElement(i, j)->getName();
+      if (items.getCtg(name) == "TOOL") {
+        /* Jika tool, */
+        invMatrix[k][l] = c.getElement(i, j);
+      } else {
+        /* Jika bukan tool, */
+        /* Cek apakah sudah diisi oleh item */
+        if (invMatrix[k][l]->getName() != "-") {
+          /* Tambahkan qty sebanyak 1 */
+          invMatrix[k][l]->addQty(1);
+        } else {
+          /* Buat baru dengan qty 1 */
+          invMatrix[k][l] = new Nontool(name, items.getType(name), 1);
+        }
+      }
+      c.setMatrix(i, j, new Item());
     }
 };
 
@@ -273,6 +343,30 @@ int main() {
       cin >> slot;
       int iSlot = stoi(slot.substr(1));
       i.use(iSlot);
+    } else if (input == "MOVE") {
+      string slot; int N;
+      cin >> slot >> N;
+      int iSlot = stoi(slot.substr(1));
+      if (slot[0] == 'I') {
+        while (N --) {
+          string dest;
+          cin >> dest;
+          int destSlot = stoi(dest.substr(1));
+          if (dest[0] == 'C') {
+            /* Pindahkan inventory ke crafting */
+            i.moveToCraft(items, c, iSlot, destSlot);
+          } else {
+            /* Pindah dari inventory ke inventory */
+            i.moveToInventory(iSlot, destSlot);
+          }
+        }
+      } else {
+        /* Pindahkan crafting ke inventory */
+        string dest;
+        cin >> dest;
+        int destSlot = stoi(dest.substr(1));
+        i.moveFromCraft(items, c, iSlot, destSlot);
+      }
     }
   }
   return 0;
