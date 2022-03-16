@@ -1,16 +1,11 @@
 #include "Tools.hpp"
 
-void Tools::init()
+Tools::Tools()
 {
   this->id = -999;
   this->name = "none";
   this->category = "none";
   this->isTool = true;
-}
-
-Tools::Tools()
-{
-  init();
   this->durability = -999;
 }
 
@@ -20,7 +15,7 @@ Tools::Tools(int id, string name, string category, int durability)
   this->name = name;
   this->category = category;
   this->isTool = true;
-  this->durability = -999;
+  this->durability = durability;
 }
 
 Tools::Tools(const Tools &anotherTools)
@@ -34,7 +29,15 @@ Tools::Tools(const Tools &anotherTools)
 Tools::~Tools()
 {
 }
+int Tools::getQuantity() const
+{
+  return 1;
+}
 
+void Tools::setQuantity(int quantity)
+{
+  throw ("Bukan non-tools");
+}
 int Tools::getDurability() const
 {
   return this->durability;

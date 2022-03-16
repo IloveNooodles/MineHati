@@ -1,4 +1,5 @@
 #include "Menu.hpp"
+#include <utility>
 #ifndef __INVENTORY_HPP__
 #define __INVENTORY_HPP__
 

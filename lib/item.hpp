@@ -31,7 +31,8 @@ protected:
   bool isTool;
 
 public:
-  virtual void init();
+  Item();
+  virtual ~Item();
   int getId() const;
   void setId(int id);
   string getName() const;
@@ -40,6 +41,10 @@ public:
   void setCategory(string category);
   bool getisTool() const;
   void setisTool(bool isTool);
+  virtual int getQuantity() const = 0;
+  virtual void setQuantity(int) = 0;
+  virtual int getDurability() const = 0;
+  virtual void setDurability(int) = 0;
 };
 
 #endif

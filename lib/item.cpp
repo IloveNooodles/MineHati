@@ -1,13 +1,13 @@
 #include "Item.hpp"
 
-void Item::init()
+Item::Item()
 {
   this->id = -999;
   this->name = "none";
   this->category = "none";
   this->isTool = false;
 }
-
+Item::~Item() {}
 int Item::getId() const
 {
   return this->id;
@@ -39,5 +39,4 @@ bool Item::getisTool() const
 void Item::setisTool(bool isTool)
 {
   this->isTool = isTool;
-  
 }

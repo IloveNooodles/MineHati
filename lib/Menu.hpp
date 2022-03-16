@@ -1,13 +1,15 @@
 #ifndef __MENU_HPP__
 #define __MENU_HPP__
 #include <iostream>
-#include "Slot.hpp"
+#include "item.hpp"
+#include "nontools.hpp"
+#include "tools.hpp"
 using namespace std;
 
 class Menu
 {
 protected:
-  Slot *storage;
+  Item **storage;
   int capacity;
 
 public:

@@ -2,9 +2,9 @@
 
 Inventory::Inventory() : Menu() {
     this->capacity = 27;
-    this->storage = new Slot[27];
+    this->storage = new Item*[27];
     for (int i = 0;i < 27;i++) {
-        storage[i] = Slot("I" + to_string(i), Nontools(), 0);
+        this->storage[i] = new Nontools();
     }
 }
 
@@ -13,23 +13,21 @@ Inventory::~Inventory() {
 }
 
 void Inventory::Add(string Name, int b) {
-    Slot el;
     if (b <= 0) {
         throw ("non-positive integer");
     }
     for(int i = 0; i < 27; i++) {
-        el = this->storage[i];
-        if (el.getItem().getName() == Name && el.getQuantity() + b <= 64) {
-            this->storage[i].setQuantity(el.getQuantity() + b);
+        Item *el = this->storage[i];
+        if (el->getisTool() == false && el->getName() == Name && el->getQuantity() + b <= 64) {
+            this->storage[i]->setQuantity(b + el->getQuantity());
             return;
         }
     }
     // tidak ditemukan slot sesuai ketentuan, cari slot kosong
     for(int i = 0; i < 27; i++) {
-        el = this->storage[i];
-        if (el.getItem().getName() == "none") {
-            this->storage[i].setItem(Nontools(1,Name,"wood")); //TODO masih coba coba
-            this->storage[i].setQuantity(b);
+        Item *el = this->storage[i];
+        if (el->getName() == "none") {
+            this->storage[i] = new Tools(1,Name,"wood",b); //TODO masih coba coba
             return;
         }
     }
@@ -40,34 +38,35 @@ void Inventory::Discard(string Id, int quantity) {
     if (quantity <= 0) {
         throw ("non-positive integer");
     }
-    for(int i = 0; i < 27; i++) {
-        if (this->storage[i].getId() == Id) {
-            if (quantity > this->storage[i].getQuantity()) {
-                throw ("Jumlah yang dibuang melebihi kuantitas");
-            }
-            else {
-                this->storage[i].setQuantity(this->storage[i].getQuantity() - quantity);
-                if (this->storage[i].getQuantity() == 0) {
-                    this->storage[i].setItem(Nontools());
-                }
-            }
-            return;
-        }
+    int i = stoi(Id.substr(1));
+    if (i < 0 || i > 26) {
+        throw ("Id tidak ditemukan"); 
     }
-    throw ("Id tidak ditemukan");    
+    if (this->storage[i]->getisTool() == true) {
+        if (quantity > 1) {
+             throw ("Jumlah yang dibuang melebihi kuantitas");
+        }
+        this->storage[i] = new Nontools();
+    }
+    if (quantity > this->storage[i]->getQuantity()) {
+        throw ("Jumlah yang dibuang melebihi kuantitas");
+    }
+    this->storage[i]->setQuantity(this->storage[i]->getQuantity() - quantity);
+    if (this->storage[i]->getQuantity() == 0) {
+        this->storage[i] = new Nontools();
+    } 
 }
 
-void Inventory::Use(string id) {
-    for(int i = 0; i < 27; i++) {
-        if (this->storage[i].getId() == id) {
-            if (this->storage[i].getItem().getisTool() == false) {
-                throw ("Item yang dipakai bukan tool");
-            }
-            else {
-                // TODO ubah tools belum tau gmn (gabisa manggil method durability)
-            }
-            return;
-        }
-    }    
-    throw ("Id tidak ditemukan");   
+void Inventory::Use(string Id) {
+    int i = stoi(Id.substr(1));
+    if (i < 0 || i > 26) {
+        throw ("Id tidak ditemukan"); 
+    }
+    if (this->storage[i]->getisTool() == false) {
+        throw ("Bukan tools");
+    }
+    this->storage[i]->setDurability(this->storage[i]->getDurability() - 1);
+    if (this->storage[i]->getDurability() == 0) {
+        this->storage[i] = new Nontools();
+    } 
 }

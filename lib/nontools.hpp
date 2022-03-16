@@ -5,12 +5,17 @@
 
 class Nontools : public Item
 {
+private:
+  int quantity;
 public:
-  void init();
   Nontools();
-  Nontools(int, string, string);
+  Nontools(int, string, string, int);
   Nontools(const Nontools &);
   ~Nontools();
+  int getQuantity() const;
+  void setQuantity(int);
+  int getDurability() const;
+  void setDurability(int);
 };
 
 #endif

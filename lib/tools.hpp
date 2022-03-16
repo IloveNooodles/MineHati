@@ -11,11 +11,12 @@ private:
   int durability;
 
 public:
-  void init();
   Tools();
   Tools(int, string, string, int);
   Tools(const Tools &);
   ~Tools();
+  int getQuantity() const;
+  void setQuantity(int);
   int getDurability() const;
   void setDurability(int);
 };
