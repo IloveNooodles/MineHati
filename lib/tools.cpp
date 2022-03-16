@@ -1,20 +1,17 @@
 #include "Tools.hpp"
 
-Tools::Tools()
+Tools::Tools() : Item()
 {
-  this->id = -999;
-  this->name = "none";
-  this->category = "none";
-  this->isTool = true;
   this->durability = -999;
 }
 
-Tools::Tools(int id, string name, string category, int durability)
+Tools::Tools(int id, string name, string category, int durability) : Item(id,name,category)
 {
-  this->id = id;
-  this->name = name;
-  this->category = category;
-  this->isTool = true;
+  this->durability = durability;
+}
+
+Tools::Tools(int id, string name, int durability) : Item(id,name)
+{
   this->durability = durability;
 }
 
@@ -26,27 +23,22 @@ Tools::Tools(const Tools &anotherTools)
   this->durability = anotherTools.durability;
 }
 
-Tools::~Tools()
-{
-}
 string Tools::print() const {
-  return (this->getName() + " (" + to_string(this->getDurability()) + "/10)");
+  return (this->getName() + " [" + to_string(this->getDurability()) + "/10]");
 }
 int Tools::getQuantity() const
 {
   return 1;
-}
-
-void Tools::setQuantity(int quantity)
-{
-  throw ("Bukan non-tools");
 }
 int Tools::getDurability() const
 {
   return this->durability;
 }
 
-void Tools::setDurability(int durability)
+void Tools::decreaseDurability(int durability)
 {
-  this->durability = durability;
+  this->durability -= durability;
+}
+bool Tools::isTool() {
+    return true;
 }

@@ -2,9 +2,10 @@
 
 int main () {
     Inventory *ayam = new Inventory();
-    ayam->Add("ayam",4);
-    ayam->Add("ayam",8);
-    ayam->Add("ayam",1);
-    ayam->Use("I0");
+    ItemsReader items;
+    ayam->give(items,"OAK_LOG",41);
+    ayam->give(items,"DIAMOND",8);
+    ayam->give(items,"OAK_LOG",25);
+    ayam->give(items,"DIAMOND_AXE",11,7);
     ayam->Show();
 }

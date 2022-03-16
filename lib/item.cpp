@@ -3,11 +3,19 @@
 Item::Item()
 {
   this->id = -999;
-  this->name = "none";
-  this->category = "none";
-  this->isTool = false;
+  this->name = "-";
+  this->category = "-";
 }
-Item::~Item() {}
+Item::Item(int id,string nama, string jenis) {
+  this->id = id;
+  this->name = nama;
+  this->category = jenis;
+}
+Item::Item(int id,string nama) {
+  this->id = id;
+  this->name = nama;
+  this->category = "-";
+}
 int Item::getId() const
 {
   return this->id;
@@ -31,12 +39,4 @@ string Item::getCategory() const
 void Item::setCategory(string category)
 {
   this->category = category;
-}
-bool Item::getisTool() const
-{
-  return this->isTool;
-}
-void Item::setisTool(bool isTool)
-{
-  this->isTool = isTool;
 }

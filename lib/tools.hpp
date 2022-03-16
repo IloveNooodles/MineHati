@@ -12,13 +12,13 @@ private:
 public:
   Tools();
   Tools(int, string, string, int);
+  Tools(int, string, int);
   Tools(const Tools &);
-  ~Tools();
   string print() const;
   int getQuantity() const;
-  void setQuantity(int);
   int getDurability() const;
-  void setDurability(int);
+  void decreaseDurability(int);
+  bool isTool();
 };
 
 #endif

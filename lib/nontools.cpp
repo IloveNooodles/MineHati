@@ -1,24 +1,19 @@
 #include "Nontools.hpp"
 
-Nontools::Nontools()
+Nontools::Nontools() : Item()
 {
-  this->id = -999;
-  this->name = "none";
-  this->category = "none";
-  this->isTool = false;
   this->quantity = 0;
 }
 
-Nontools::Nontools(int id, string name, string category, int quantity)
+Nontools::Nontools(int id, string name, string category, int quantity) : Item(id,name,category)
 {
-  this->id = id;
-  this->name = name;
-  this->category = category;
-  this->isTool = false;
   this->quantity = quantity;
 }
 
-Nontools::~Nontools() {}
+Nontools::Nontools(int id, string name, int quantity) : Item(id,name)
+{
+  this->quantity = quantity;
+}
 
 string Nontools::print() const {
   return (this->getName() + " " + to_string(this->getQuantity()));
@@ -36,17 +31,11 @@ int Nontools::getQuantity() const
   return this->quantity;
 }
 
-void Nontools::setQuantity(int quantity)
+void Nontools::addQuantity(int quantity)
 {
-  this->quantity = quantity;
+  this->quantity += quantity;
 }
 
-int Nontools::getDurability() const
-{
-  throw ("Bukan tools");
-}
-
-void Nontools::setDurability(int durability)
-{
-  throw ("Bukan tools");
+bool Nontools::isNontool() {
+  return true;
 }
