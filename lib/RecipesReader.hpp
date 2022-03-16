@@ -1,5 +1,5 @@
-#ifndef __READER_HPP__
-#define __READER_HPP__
+#ifndef __RECIPESREADER_HPP__
+#define __RECIPESREADER_HPP__
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -74,34 +74,6 @@ class RecipesReader {
     }
     vector<Recipe> getRecipes() {
       return recipes;
-    }
-};
-
-class ItemsReader {
-  private:
-    map <string, int> idMap;
-    map <string, string> typeMap;
-    map <string, string> ctgMap;
-  public:
-    ItemsReader() {
-      ifstream inFile;
-      inFile.open("./config/item.txt");
-      int id; string name; string type; string ctg;
-      while (inFile >> id >> name >> type >> ctg) {
-        this->idMap[name] = id;
-        this->typeMap[name] = type;
-        this->ctgMap[name] = ctg;
-      }
-      inFile.close();
-    }
-    int getID(string name) {
-      return this->idMap[name];
-    }
-    string getType(string name) {
-      return this->typeMap[name];
-    }
-    string getCtg(string name) {
-      return this->ctgMap[name];
     }
 };
 #endif

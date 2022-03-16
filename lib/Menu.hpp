@@ -21,7 +21,6 @@ public:
   void setCapacity();
   virtual ~Menu();
   void Export();
-  void MoveTumpuk(string src, int n, string dest);
   void Show();
 };
 #endif

@@ -7,6 +7,7 @@
 class Inventory : public Menu
 {
 public:
+  Inventory();
   virtual ~Inventory();
   void give(ItemsReader& items, string name, int quantity, int dura);
   void give(ItemsReader& items, string name, int quantity);

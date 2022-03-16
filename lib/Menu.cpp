@@ -19,38 +19,6 @@ Menu::~Menu() {
     cout << "Destroy matrix" << endl;
 }
 void Menu::Export() {}
-void Menu::MoveTumpuk(string src, int n, string dest) {
-    int isrc = stoi(src.substr(1));
-    int idest = stoi(dest.substr(1));
-    if (isrc < 0 || isrc > 26)  
-    {
-        throw ("Id tidak ditemukan");
-    }
-    if (idest < 0 || idest > 26)  
-    {
-        throw ("Id tidak ditemukan");
-    }
-    Item *s = this->storage[isrc].first;
-    Item *d = this->storage[idest].first;
-    if(d->getId() != s->getId() || s->getisTool())
-    {
-        throw ("Tidak bisa menumpuk kedua barang ini");
-    }
-    if(d->getQuantity()+s->getQuantity() <= 64)
-    {
-        d->setQuantity(s->getQuantity() + d->getQuantity());
-        s->setQuantity(0);
-    }
-    else
-    {
-        s->setQuantity(d->getQuantity()+s->getQuantity()-64);
-        d->setQuantity(64);
-    }
-    if(s->getQuantity() <= 0)
-    {
-        this->storage[isrc] = make_pair(new Nontools(),this->storage[isrc].second);
-    }
-}
 void Menu::Show() {
     for (int i = 0;i < 3;i++) { //craftingGrid
         for (int j = 0; j < this->craftingCapacity/3;j++) {

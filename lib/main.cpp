@@ -12,8 +12,6 @@ int main () {
     ayam->give(items,"DIAMOND_AXE",11,7);
     ayam->Show();
     cout<<endl;
-    ayam->MoveTumpuk("I1", 1, "I0");
-    ayam->Show();
     
     
 }
