@@ -1,6 +1,7 @@
 #ifndef __MENU_HPP__
 #define __MENU_HPP__
 #include <iostream>
+#include <utility>
 #include "item.hpp"
 #include "nontools.hpp"
 #include "tools.hpp"
@@ -9,7 +10,7 @@ using namespace std;
 class Menu
 {
 protected:
-  Item **storage;
+  pair<Item*,string> *storage;
   int capacity;
 
 public:

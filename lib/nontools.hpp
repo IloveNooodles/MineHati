@@ -1,7 +1,6 @@
-#include "Item.hpp"
-
 #ifndef __NONTOOLS_HPP_
 #define __NONTOOLS_HPP_
+#include "Item.hpp"
 
 class Nontools : public Item
 {
@@ -12,6 +11,7 @@ public:
   Nontools(int, string, string, int);
   Nontools(const Nontools &);
   ~Nontools();
+  string print() const;
   int getQuantity() const;
   void setQuantity(int);
   int getDurability() const;

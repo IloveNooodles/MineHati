@@ -2,9 +2,9 @@
 
 Inventory::Inventory() : Menu() {
     this->capacity = 27;
-    this->storage = new Item*[27];
+    this->storage = new pair<Item*,string>[27];
     for (int i = 0;i < 27;i++) {
-        this->storage[i] = new Nontools();
+        this->storage[i] = make_pair(new Nontools(),"I" + to_string(i));
     }
 }
 
@@ -17,17 +17,17 @@ void Inventory::Add(string Name, int b) {
         throw ("non-positive integer");
     }
     for(int i = 0; i < 27; i++) {
-        Item *el = this->storage[i];
+        Item *el = this->storage[i].first;
         if (el->getisTool() == false && el->getName() == Name && el->getQuantity() + b <= 64) {
-            this->storage[i]->setQuantity(b + el->getQuantity());
+            this->storage[i].first->setQuantity(b + el->getQuantity());
             return;
         }
     }
     // tidak ditemukan slot sesuai ketentuan, cari slot kosong
     for(int i = 0; i < 27; i++) {
-        Item *el = this->storage[i];
+        Item *el = this->storage[i].first;
         if (el->getName() == "none") {
-            this->storage[i] = new Tools(1,Name,"wood",b); //TODO masih coba coba
+            this->storage[i] = make_pair(new Tools(1,Name,"wood",b),this->storage[i].second); //TODO masih coba coba
             return;
         }
     }
@@ -42,18 +42,18 @@ void Inventory::Discard(string Id, int quantity) {
     if (i < 0 || i > 26) {
         throw ("Id tidak ditemukan"); 
     }
-    if (this->storage[i]->getisTool() == true) {
+    if (this->storage[i].first->getisTool() == true) {
         if (quantity > 1) {
              throw ("Jumlah yang dibuang melebihi kuantitas");
         }
-        this->storage[i] = new Nontools();
+        this->storage[i] = make_pair(new Nontools(),this->storage[i].second);
     }
-    if (quantity > this->storage[i]->getQuantity()) {
+    if (quantity > this->storage[i].first->getQuantity()) {
         throw ("Jumlah yang dibuang melebihi kuantitas");
     }
-    this->storage[i]->setQuantity(this->storage[i]->getQuantity() - quantity);
-    if (this->storage[i]->getQuantity() == 0) {
-        this->storage[i] = new Nontools();
+    this->storage[i].first->setQuantity(this->storage[i].first->getQuantity() - quantity);
+    if (this->storage[i].first->getQuantity() == 0) {
+        this->storage[i] = make_pair(new Nontools(),this->storage[i].second);
     } 
 }
 
@@ -62,11 +62,11 @@ void Inventory::Use(string Id) {
     if (i < 0 || i > 26) {
         throw ("Id tidak ditemukan"); 
     }
-    if (this->storage[i]->getisTool() == false) {
+    if (this->storage[i].first->getisTool() == false) {
         throw ("Bukan tools");
     }
-    this->storage[i]->setDurability(this->storage[i]->getDurability() - 1);
-    if (this->storage[i]->getDurability() == 0) {
-        this->storage[i] = new Nontools();
+    this->storage[i].first->setDurability(this->storage[i].first->getDurability() - 1);
+    if (this->storage[i].first->getDurability() == 0) {
+        this->storage[i] = make_pair(new Nontools(),this->storage[i].second);
     } 
 }

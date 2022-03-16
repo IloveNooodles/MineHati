@@ -1,7 +1,6 @@
-#include "Item.hpp"
-
 #ifndef __TOOLS_HPP_
 #define __TOOLS_HPP_
+#include "Item.hpp"
 
 // durability 0;
 
@@ -15,6 +14,7 @@ public:
   Tools(int, string, string, int);
   Tools(const Tools &);
   ~Tools();
+  string print() const;
   int getQuantity() const;
   void setQuantity(int);
   int getDurability() const;

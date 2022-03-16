@@ -20,6 +20,9 @@ Nontools::Nontools(int id, string name, string category, int quantity)
 
 Nontools::~Nontools() {}
 
+string Nontools::print() const {
+  return (this->getName() + " " + to_string(this->getQuantity()));
+}
 Nontools::Nontools(const Nontools &anotherTools)
 {
   this->id = anotherTools.id;

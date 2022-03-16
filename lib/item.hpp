@@ -41,6 +41,7 @@ public:
   void setCategory(string category);
   bool getisTool() const;
   void setisTool(bool isTool);
+  virtual string print() const = 0;
   virtual int getQuantity() const = 0;
   virtual void setQuantity(int) = 0;
   virtual int getDurability() const = 0;
