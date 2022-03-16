@@ -4,8 +4,76 @@
 #include <vector>
 #include <map>
 #include <fstream>
+#include <filesystem>
 
 using namespace std;
+namespace fs = std::filesystem;
+
+class Recipe {
+  private:
+    int rows;
+    int cols;
+    vector<vector<string>> recipe;
+    string name;
+    int amount;
+  public:
+    Recipe(int rows, int cols, vector<vector<string>> recipe, string name, int amount) {
+      this->rows = rows;
+      this->cols = cols;
+      this->recipe = recipe;
+      this->name = name;
+      this->amount = amount;
+    }
+    string getName() {
+      return this->name;
+    }
+    int getAmount() {
+      return this->amount;
+    }
+    int getRows() {
+      return this->rows;
+    }
+    int getCols() {
+      return this->cols;
+    }
+    vector<vector<string>> getRecipe() {
+      return this->recipe;
+    }
+};
+
+class RecipesReader {
+  private:
+    vector<Recipe> recipes;
+  public:
+    RecipesReader() {
+      for (const auto & file : fs::directory_iterator("./config/recipe")) {
+        /* Baca file, simpan property Recipenya */
+        ifstream inFile;
+        inFile.open(file.path());
+        int rows; int cols;
+        inFile >> rows >> cols;
+        vector<vector<string>> recipe;
+        for (int i = 0; i < rows; i ++) {
+          vector<string> tmp;
+          for (int j = 0; j < cols; j ++) {
+            string r;
+            inFile >> r;
+            tmp.push_back(r);
+          }
+          recipe.push_back(tmp);
+        }
+        string name; int qty;
+        inFile >> name >> qty;
+        inFile.close();
+        /* Masukkan recipe ke recipes */
+        Recipe r(rows, cols, recipe, name, qty);
+        recipes.push_back(r);
+      }
+    }
+    vector<Recipe> getRecipes() {
+      return recipes;
+    }
+};
 
 class ItemsReader {
   private:
@@ -15,7 +83,7 @@ class ItemsReader {
   public:
     ItemsReader() {
       ifstream inFile;
-      inFile.open("./item.txt");
+      inFile.open("./config/item.txt");
       int id; string name; string type; string ctg;
       while (inFile >> id >> name >> type >> ctg) {
         this->idMap[name] = id;
@@ -58,6 +126,9 @@ class Item {
     }
     string getName() {
       return this->nama;
+    }
+    string getType() {
+      return this->jenis;
     }
     int getQty() {
       return this->qty;
@@ -114,6 +185,15 @@ class Crafting {
         cMatrix.push_back(tmp);
       }
     }
+    void emptyCrafting() {
+      for (int i = 0; i < 3; i ++) {
+        for (int j = 0; j < 3; j ++) {
+          if (cMatrix[i][j]->getName() != "-") {
+            cMatrix[i][j] = new Item();
+          }
+        }
+      }
+    }
     void print() {
       int slot = 0;
       for (int i = 0; i < 3; i ++) {
@@ -137,6 +217,40 @@ class Crafting {
     }
     Item* getElement(int i, int j) {
       return cMatrix[i][j];
+    }
+    int getCraftingRows() {
+      int minRow = 999;
+      int maxRow = -999;
+      for (int i = 0; i < 3; i ++) {
+        for (int j = 0; j < 3; j ++) {
+          if (cMatrix[i][j]->getName() != "-") {
+            if (i + 1 < minRow) {
+              minRow = i + 1;
+            }
+            if (i + 1 > maxRow) {
+              maxRow = i + 1;
+            }
+          }
+        }
+      }
+      return (maxRow == -999) ? 0 : maxRow - minRow + 1;
+    }
+    int getCraftingCols() {
+      int minCol = 999;
+      int maxCol = -999;
+      for (int i = 0; i < 3; i ++) {
+        for (int j = 0; j < 3; j ++) {
+          if (cMatrix[i][j]->getName() != "-") {
+            if (j + 1 < minCol) {
+              minCol = j + 1;
+            }
+            if (j + 1 > maxCol) {
+              maxCol = j + 1;
+            }
+          }
+        }
+      }
+      return (maxCol == -999) ? 0 : maxCol - minCol + 1;
     }
 };
 
@@ -169,6 +283,23 @@ class Inventory {
           slot ++;
         }
         cout << endl;
+      }
+    }
+    void give(ItemsReader& items, string name, int qty, int dura) {
+      if (items.getCtg(name) == "TOOL") {
+        /* Cari slot untuk dimasukkan tool */
+        int i = 0;
+        while (i < 3 && qty > 0) {
+          int j = 0;
+          while (j < 9 && qty > 0) {
+            if (invMatrix[i][j]->getName() == "-") {
+              invMatrix[i][j] = new Tool(name, dura);
+              qty --;
+            }
+            j ++;
+          }
+          i ++;
+        }
       }
     }
     void give(ItemsReader& items, string name, int qty) {
@@ -313,12 +444,113 @@ class Inventory {
       }
       c.setMatrix(i, j, new Item());
     }
+    void doCrafting(ItemsReader& items, RecipesReader& recipes, Crafting& c) {
+      vector<Recipe> r = recipes.getRecipes();
+      bool recipeFound = false;
+      /* Cek apakah tipe yang harus membenarkan atau tidak */
+      bool fixedItem = false;
+      int itemCount = 0; /* Banyak non tool */
+      int itemDura[] = {-1, -1};
+      string itemName[] = {"-", "-"};
+      for (int i = 0; i < 3 && itemCount < 2; i ++) {
+        for (int j = 0; j < 3 && itemCount < 2; j ++) {
+          string name = c.getElement(i, j)->getName();
+          if (name != "-") {
+            if (items.getCtg(name) == "TOOL") {
+              itemDura[itemCount] = c.getElement(i, j)->getDura();
+              itemName[itemCount] = c.getElement(i, j)->getName();
+              itemCount ++;
+            } else {
+              itemCount += 999; /* Agar keluar dari loop */
+            }
+          }
+        }
+      }
+      if (itemCount == 2) {
+        if (itemName[0] == itemName[1]) {
+          /* Boleh melakukan fix */
+          fixedItem = true;
+        }
+      }
+      if (fixedItem) {
+        /* Yang dilakukan adalah memperbaiki item */
+        int dura = (itemDura[0] + itemDura[1] > 10 ? 10 : itemDura[0] + itemDura[1]);
+        give(items, itemName[0], 1, dura);
+        c.emptyCrafting();
+      } else {
+        /* Cek setiap resep yang ada di recipe */
+        for (int x = 0; x < r.size(); x ++) {
+          vector<vector<string>> recipe = r[x].getRecipe();
+          int rows = r[x].getRows();
+          int cols = r[x].getCols();
+          if (rows != c.getCraftingRows() || cols != c.getCraftingCols()) {
+            continue;
+          }
+          /* Looping pada matrix c */
+          bool foundDifferent = false;
+          for (int i = 0; i < 3 - rows + 1 && !recipeFound; i ++) {
+            for (int j = 0; j < 3 - cols + 1 && !recipeFound; j ++) {
+              foundDifferent = false;
+              for (int k = 0; k < rows && !foundDifferent; k ++) {
+                for (int l = 0; l < cols && !foundDifferent; l ++) {
+                  if (c.getElement(i + k, j + l)->getName() != "-") {
+                    string type = items.getType(c.getElement(i + k, j + l)->getName());
+                    if (type != "-") {
+                      /* Ada tipenya */
+                      foundDifferent = type != recipe[k][l];
+                    } else {
+                      /* Tidak ada tipenya */
+                      foundDifferent = c.getElement(i + k, j + l)->getName() != recipe[k][l];
+                    }
+                  } else {
+                    foundDifferent = c.getElement(i + k, j + l)->getName() != recipe[k][l];
+                  }
+                }
+              }
+              /* k dan l out of range atau foundDifferent = true */
+              if (!foundDifferent) {
+                recipeFound = true; 
+              }
+            }
+          }
+
+          if (recipeFound) {
+            c.emptyCrafting();
+            give(items, r[x].getName(), r[x].getAmount());
+          }
+        }
+      }
+      if (!recipeFound && !fixedItem) {
+        /* Nanti ganti pakai exception */
+        cout << ">> Gagal melakukan crafting." << endl;
+      }
+    }
+    void exportInventory(ItemsReader& items, string loc) {
+      ofstream file;
+      file.open(loc);
+      for (int i = 0; i < 3; i ++) {
+        for (int j = 0; j < 9; j ++) {
+          string name = invMatrix[i][j]->getName();
+          if (name == "-") {
+            file << "0:0\n";
+          } else {
+            if (items.getCtg(name) == "TOOL") {
+              file << items.getID(name) << ":" << invMatrix[i][j]->getDura() << endl;
+            } else {
+              file << items.getID(name) << ":" << invMatrix[i][j]->getQty() << endl;
+            }
+          }
+        }
+      }
+      file.close();
+    }
 };
 
 int main() {
   Inventory i;
   Crafting c;
   ItemsReader items;
+  RecipesReader recipes;
   
   while (true) {
     cout << "> ";
@@ -367,6 +599,12 @@ int main() {
         int destSlot = stoi(dest.substr(1));
         i.moveFromCraft(items, c, iSlot, destSlot);
       }
+    } else if (input == "CRAFT") {
+      i.doCrafting(items, recipes, c);
+    } else if (input == "EXPORT") {
+      string loc;
+      cin >> loc;
+      i.exportInventory(items, "./" + loc);
     }
   }
   return 0;
