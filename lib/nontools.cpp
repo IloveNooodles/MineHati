@@ -34,6 +34,9 @@ int Nontools::getQuantity() const
 
 void Nontools::addQuantity(int quantity)
 {
+  if (this->quantity + quantity > 64) {
+    throw ("slot sudah penuh");
+  }
   this->quantity += quantity;
 }
 
