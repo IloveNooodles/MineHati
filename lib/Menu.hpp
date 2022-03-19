@@ -6,6 +6,7 @@
 #include "nontools.hpp"
 #include "tools.hpp"
 #include "ItemsReader.hpp"
+#include "RecipesReader.hpp"
 using namespace std;
 
 class Menu
@@ -28,9 +29,11 @@ public:
   void Discard(string, int);
   void Use(string);
   void Show();
-  void give(ItemsReader& items, string name, int quantity, int dura);
-  void give(ItemsReader& items, string name, int quantity);
-  pair<Item*,string> getElement(int i, int j); //element crafting grid
   void exportInventory(ItemsReader& items, string loc);
+  pair<Item*,string> getElement(int i, int j);
+  void Craft(ItemsReader& items, RecipesReader& recipes);
+  int getCraftingRows();
+  int getCraftingCols();
+  void emptyCrafting();
 };
 #endif
