@@ -109,3 +109,82 @@ void Menu::Show() {
         cout << endl;
     }
 }
+void Menu::give(ItemsReader &items, string name, int qty, int dura)
+{
+  if (items.getCtg(name) == "TOOL")
+  {
+    /* Cari slot untuk dimasukkan tool */
+    int i = 0;
+    while (i < 27 && qty > 0)
+    {
+      if (storage[i].first->getName() == "-")
+      {
+        this->storage[i] = make_pair(new Tools(items.getID(name), name, dura), this->storage[i].second);
+        qty--;
+      }
+      i++;
+    }
+  }
+}
+
+void Menu::give(ItemsReader &items, string name, int qty)
+{
+  if (items.getCtg(name) == "TOOL")
+  {
+    int i = 0;
+    while (i < 27 && qty > 0)
+    {
+      if (storage[i].first->getName() == "-")
+      {
+        this->storage[i] = make_pair(new Tools(items.getID(name), name, 10), this->storage[i].second);
+        qty--;
+      }
+      i++;
+    }
+  }
+  else if (items.getCtg(name) == "NONTOOL")
+  {
+    int i = 0;
+    while (i < 27 && qty > 0)
+    {
+      if (storage[i].first->getName() == name)
+      {
+        if (qty + storage[i].first->getQuantity() <= 64)
+        {
+          storage[i].first->addQuantity(qty);
+          qty = 0;
+        }
+        else
+        {
+          int sisa = 64 - storage[i].first->getQuantity();
+          storage[i].first->addQuantity(sisa);
+          qty -= sisa;
+        }
+      }
+      i++;
+    }
+    /* Cari slot yang kosong untuk dimasukkan nontool */
+    i = 0;
+    while (i < 27 && qty > 0)
+    {
+      if (storage[i].first->getName() == "-")
+      {
+        if (qty <= 64)
+        {
+          storage[i] = make_pair(new Nontools(items.getID(name), name, items.getType(name), qty), this->storage[i].second);
+          qty = 0;
+        }
+        else
+        {
+          storage[i] = make_pair(new Nontools(items.getID(name), name, items.getType(name), 64), this->storage[i].second);
+          qty -= 64;
+        }
+      }
+      i++;
+    }
+  }
+}
+pair<Item*,string> Menu::getElement(int i, int j)
+{
+    return this->craftingGrid[3*i+j];
+}

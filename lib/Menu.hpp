@@ -5,6 +5,7 @@
 #include "item.hpp"
 #include "nontools.hpp"
 #include "tools.hpp"
+#include "ItemsReader.hpp"
 using namespace std;
 
 class Menu
@@ -24,5 +25,8 @@ public:
   void MoveFromCraft(string src, string dest);
   void Export();
   void Show();
+  void give(ItemsReader& items, string name, int quantity, int dura);
+  void give(ItemsReader& items, string name, int quantity);
+  pair<Item*,string> getElement(int i, int j); //element crafting grid
 };
 #endif

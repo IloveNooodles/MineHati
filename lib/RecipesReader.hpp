@@ -48,7 +48,7 @@ class RecipesReader {
     vector<Recipe> recipes;
   public:
     RecipesReader() {
-      for (const auto & file : fs::directory_iterator("./config/recipe")) {
+      for (const auto & file : fs::directory_iterator("../config/recipe")) {
         /* Baca file, simpan property Recipenya */
         ifstream inFile;
         inFile.open(file.path());
