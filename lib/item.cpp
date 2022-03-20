@@ -1,5 +1,7 @@
 #include "item.hpp"
 
+using namespace MineHati;
+
 Item::Item()
 {
   this->id = -999;

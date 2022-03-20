@@ -1,5 +1,7 @@
 #include "tools.hpp"
 
+using namespace MineHati;
+
 Tools::Tools() : Item()
 {
   this->durability = -999;

@@ -1,5 +1,7 @@
 #include "nontools.hpp"
 
+using namespace MineHati;
+
 Nontools::Nontools() : Item()
 {
   this->quantity = 0;

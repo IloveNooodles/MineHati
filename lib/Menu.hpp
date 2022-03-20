@@ -6,34 +6,30 @@
 #include "nontools.hpp"
 #include "tools.hpp"
 #include "ItemsReader.hpp"
-#include "RecipesReader.hpp"
-using namespace std;
+namespace MineHati {
+	using namespace std;
 
-class Menu
-{
-protected:
-  pair<Item*,string> *storage;
-  pair<Item*,string> *craftingGrid;
-  int capacity;
-  int craftingCapacity;
+	class Menu
+	{
+	protected:
+		pair<Item*, string>* storage;
+		pair<Item*, string>* craftingGrid;
+		int capacity;
+		int craftingCapacity;
 
-public:
-  Menu();
-  ~Menu();
-  int checkId(string Id);
-  void MoveToCraft(string src, int n, string* dest);
-  void MoveFromCraft(string src, string dest);
-  void MoveInventory(string src, string dest);
-  void give(ItemsReader& items, string name, int quantity, int dura);
-  void give(ItemsReader& items, string name, int quantity);
-  void Discard(string, int);
-  void Use(string);
-  void Show();
-  void exportInventory(ItemsReader& items, string loc);
-  pair<Item*,string> getElement(int i, int j);
-  void Craft(ItemsReader& items, RecipesReader& recipes);
-  int getCraftingRows();
-  int getCraftingCols();
-  void emptyCrafting();
-};
+	public:
+		Menu();
+		~Menu();
+		int checkId(string Id);
+		void MoveToCraft(string src, int n, string* dest);
+		void MoveFromCraft(string src, string dest);
+		void MoveInventory(string src, string dest);
+		void give(ItemsReader& items, string name, int quantity, int dura);
+		void give(ItemsReader& items, string name, int quantity);
+		void Discard(string, int);
+		void Use(string);
+		void Show();
+		void exportInventory(ItemsReader& items, string loc);
+	};
+}
 #endif

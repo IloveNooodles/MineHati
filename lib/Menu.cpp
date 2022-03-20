@@ -1,5 +1,6 @@
 #include "Menu.hpp"
 #include <typeinfo>
+using namespace MineHati;
 
 Menu::Menu() {
     this->craftingCapacity = 9; //init craftingGrid
@@ -25,7 +26,7 @@ void Menu::MoveToCraft(string src, int n, string* dest) //move dari inventory ke
 {
     int i = checkId(src);
     if (i < 0 || i > 26) {
-        throw ("ID not found"); 
+        throw ("Id tidak ditemukan"); 
     }
     if(this->storage[i].first->getName()=="-" ||(this->storage[i].first->isTool()&&n>1))
     {
@@ -36,7 +37,7 @@ void Menu::MoveToCraft(string src, int n, string* dest) //move dari inventory ke
         int j = checkId(dest[k]);
         if (j < 0 || j > 8) 
         {
-            throw ("ID not found"); 
+            throw ("Id tidak ditemukan"); 
         }   
         Item *s = storage[i].first;
         if(this->craftingGrid[j].first->getName() != "-")
@@ -66,11 +67,11 @@ void Menu::MoveFromCraft(string src, string dest) //move dari crafting grid ke i
     Item *s = craftingGrid[i].first;
     Item *d = storage[j].first;
     if (i < 0 || i > 9 || j < 0 || j > 26) {
-        throw ("ID not found"); 
+        throw ("Id tidak ditemukan"); 
     }
     if(s->getName() == "-")
     {
-        throw("Not available");
+        throw("No item found");
     }
     if(d->getName()=="-")
     {
@@ -100,7 +101,7 @@ void Menu::MoveInventory(string src, string dest)
     int j = checkId(dest);
     if (i < 0 || i > 26 || j < 0 || j > 26)
     {
-        throw("ID not found");
+        throw("Id tidak ditemukan");
     }
     if (!this->storage[i].first->isNontool() && !this->storage[j].first->isNontool())
     {
@@ -202,7 +203,7 @@ void Menu::Discard(string Id, int quantity)
   int i = stoi(Id.substr(1));
   if (i < 0 || i > 26)
   {
-    throw("ID not found");
+    throw("Id tidak ditemukan");
   }
   if (this->storage[i].first->isTool() == true)
   {
@@ -228,7 +229,7 @@ void Menu::Use(string Id)
   int i = stoi(Id.substr(1));
   if (i < 0 || i > 26)
   {
-    throw("Jumlah yang dibuang melebihi kuantitas");
+    throw("Id tidak ditemukan");
   }
   if (this->storage[i].first->isTool() == false)
   {
@@ -274,131 +275,4 @@ void Menu::exportInventory(ItemsReader& items, string loc) {
     }
   }
   file.close();
-}
-pair<Item*,string> Menu::getElement(int i, int j)
-{
-  return this->craftingGrid[3*i+j];
-}
-void Menu::Craft(ItemsReader& items, RecipesReader& recipes)
-{
-  vector<Recipe> r = recipes.getRecipes();
-  bool recipeFound = false;
-  /* Cek apakah tipe yang harus membenarkan atau tidak */
-  bool fixedItem = false;
-  int itemCount = 0; /* Banyak non tool */
-  int itemDura[] = {-1, -1};
-  string itemName[] = {"-", "-"};
-  for (int i = 0; i < 3 && itemCount < 2; i ++) {
-    for (int j = 0; j < 3 && itemCount < 2; j ++) {
-      string name = this->getElement(i, j).first->getName();
-      if (name != "-") {
-        if (items.getCtg(name) == "TOOL") {
-          itemDura[itemCount] = this->getElement(i, j).first->getDurability();
-          itemName[itemCount] = this->getElement(i, j).first->getName();
-          itemCount ++;
-        } else {
-          itemCount += 999; /* Agar keluar dari loop */
-        }
-      }
-    }
-  }
-  if (itemCount == 2) {
-    if (itemName[0] == itemName[1]) {
-      /* Boleh melakukan fix */
-      fixedItem = true;
-    }
-  }
-  if (fixedItem) {
-    /* Yang dilakukan adalah memperbaiki item */
-    int dura = (itemDura[0] + itemDura[1] > 10 ? 10 : itemDura[0] + itemDura[1]);
-    give(items, itemName[0], 1, dura);
-    this->emptyCrafting();
-  } else {
-    /* Cek setiap resep yang ada di recipe */
-    for (int x = 0; x < r.size(); x ++) {
-      vector<vector<string>> recipe = r[x].getRecipe();
-      int rows = r[x].getRows();
-      int cols = r[x].getCols();
-      if (rows != this->getCraftingRows() || cols != this->getCraftingCols()) {
-        continue;
-      }
-      /* Looping pada matrix c */
-      bool foundDifferent = false;
-      for (int i = 0; i < 3 - rows + 1 && !recipeFound; i ++) {
-        for (int j = 0; j < 3 - cols + 1 && !recipeFound; j ++) {
-          foundDifferent = false;
-          for (int k = 0; k < rows && !foundDifferent; k ++) {
-            for (int l = 0; l < cols && !foundDifferent; l ++) {
-              if (this->getElement(i + k, j + l).first->getName() != "-") {
-                string type = items.getType(this->getElement(i + k, j + l).first->getName());
-                if (type != "-") {
-                  /* Ada tipenya */
-                  foundDifferent = type != recipe[k][l];
-                } else {
-                  /* Tidak ada tipenya */
-                  foundDifferent = this->getElement(i + k, j + l).first->getName() != recipe[k][l];
-                }
-              } else {
-                foundDifferent = this->getElement(i + k, j + l).first->getName() != recipe[k][l];
-              }
-            }
-          }
-          /* k dan l out of range atau foundDifferent = true */
-          if (!foundDifferent) {
-            recipeFound = true; 
-          }
-        }
-      }
-
-      if (recipeFound) {
-        this->emptyCrafting();
-        give(items, r[x].getName(), r[x].getAmount());
-      }
-    }
-  }
-  if (!recipeFound && !fixedItem) {
-    /* Nanti ganti pakai exception */
-    cout << ">> Gagal melakukan crafting." << endl;
-  }
-}
-int Menu::getCraftingRows() {
-  int minRow = 999;
-  int maxRow = -999;
-  for (int i = 0; i < 3; i ++) {
-    for (int j = 0; j < 3; j ++) {
-      if (this->getElement(i, j).first->getName() != "-") {
-        if (i + 1 < minRow) {
-          minRow = i + 1;
-        }
-        if (i + 1 > maxRow) {
-          maxRow = i + 1;
-        }
-      }
-    }
-  }
-  return (maxRow == -999) ? 0 : maxRow - minRow + 1;
-}
-int Menu::getCraftingCols() {
-  int minCol = 999;
-  int maxCol = -999;
-  for (int i = 0; i < 3; i ++) {
-    for (int j = 0; j < 3; j ++) {
-      if (this->getElement(i, j).first->getName() != "-") {
-        if (j + 1 < minCol) {
-          minCol = j + 1;
-        }
-        if (j + 1 > maxCol) {
-          maxCol = j + 1;
-        }
-      }
-    }
-  }
-  return (maxCol == -999) ? 0 : maxCol - minCol + 1;
-}
-void Menu::emptyCrafting()
-{
-  for(int i = 0; i<craftingCapacity; i++)
-  {
-    this->craftingGrid[i] = make_pair(new Item(), this->craftingGrid[i].second);
-  }
 }
