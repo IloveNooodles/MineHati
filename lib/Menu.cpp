@@ -25,7 +25,7 @@ void Menu::MoveToCraft(string src, int n, string* dest) //move dari inventory ke
 {
     int i = checkId(src);
     if (i < 0 || i > 26) {
-        throw ("Id tidak ditemukan"); 
+        throw ("ID not found"); 
     }
     if(this->storage[i].first->getName()=="-" ||(this->storage[i].first->isTool()&&n>1))
     {
@@ -36,7 +36,7 @@ void Menu::MoveToCraft(string src, int n, string* dest) //move dari inventory ke
         int j = checkId(dest[k]);
         if (j < 0 || j > 8) 
         {
-            throw ("Id tidak ditemukan"); 
+            throw ("ID not found"); 
         }   
         Item *s = storage[i].first;
         if(this->craftingGrid[j].first->getName() != "-")
@@ -66,11 +66,11 @@ void Menu::MoveFromCraft(string src, string dest) //move dari crafting grid ke i
     Item *s = craftingGrid[i].first;
     Item *d = storage[j].first;
     if (i < 0 || i > 9 || j < 0 || j > 26) {
-        throw ("Id tidak ditemukan"); 
+        throw ("ID not found"); 
     }
     if(s->getName() == "-")
     {
-        throw("No item found");
+        throw("Not available");
     }
     if(d->getName()=="-")
     {
@@ -100,7 +100,7 @@ void Menu::MoveInventory(string src, string dest)
     int j = checkId(dest);
     if (i < 0 || i > 26 || j < 0 || j > 26)
     {
-        throw("Id tidak ditemukan");
+        throw("ID not found");
     }
     if (!this->storage[i].first->isNontool() && !this->storage[j].first->isNontool())
     {
@@ -202,7 +202,7 @@ void Menu::Discard(string Id, int quantity)
   int i = stoi(Id.substr(1));
   if (i < 0 || i > 26)
   {
-    throw("Id tidak ditemukan");
+    throw("ID not found");
   }
   if (this->storage[i].first->isTool() == true)
   {
@@ -228,7 +228,7 @@ void Menu::Use(string Id)
   int i = stoi(Id.substr(1));
   if (i < 0 || i > 26)
   {
-    throw("Id tidak ditemukan");
+    throw("Jumlah yang dibuang melebihi kuantitas");
   }
   if (this->storage[i].first->isTool() == false)
   {
