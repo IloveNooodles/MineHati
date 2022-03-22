@@ -55,23 +55,27 @@ Item* Menu::getStorageElmtAtIdx(int index) {
   return this->storage[index].first;
 }
 
+//getter storage slot name
 string Menu::getStorageSlotName(int index) {
   return this->storage[index].second;
 }
 
-//setter storage elmt
+//getter storage elmt
 Item *Menu::getCraftElmtAtIdx(int index) {
   return this->craftingGrid[index].first;
 }
 
+//getter craft slot name
 string Menu::getCraftSlotName(int index) {
   return this->craftingGrid[index].second;
 }
 
+//setter storage elmt
 void Menu::setStorageAtIdx(int index, Item* i, string name) {
   this->storage[index] = make_pair(i, name);
 }
 
+//setter craft elmt
 void Menu::setCraftingGridAtIdx(int index, Item* i, string name){
   this->craftingGrid[index] = make_pair(i, name);
 }
@@ -91,74 +95,89 @@ void Menu::MoveToCraft(string src, int qty, string* dest) //move dari inventory 
     {
         int j = checkId(dest[k], "CRAFT");
         Item *crft = getCraftElmtAtIdx(j);
+        //if item in s in nontool
         if(s->isNontool())
         {
+          //if already exists with the same item
           if(crft->getName() == s->getName())
           {
+            //if the slot have over 64 qty else add 1
             if(crft->getQuantity() >= 64)
             {
               throw("Slot is full");
             }
             crft->addQuantity(1);
           }
+          //if the same is empty set the slot to current item
           else
           {
             setCraftingGridAtIdx(j, new Nontools(s->getId(), s->getName(), s->getCategory(), 1), getCraftSlotName(j));
           }
           s->addQuantity(-1);
+          //if the element we remove only one then set the storage empty
           if(s->getQuantity()==0)
           {
             setStorageAtIdx(i, new Item(), getStorageSlotName(i));
           }
         }
+        //the item is tool then we cannot overwrite the item in the craft
         else
         {
             if(getCraftElmtAtIdx(j)->getName() != "-")
             {
                 throw("salah satu petak telah terisi");
             }
+            //set the craft and reomve from storage
             setCraftingGridAtIdx(j, new Tools(s->getId(), s->getName(), s->getCategory(), s->getDurability()), getCraftSlotName(j));
             setStorageAtIdx(i, new Item(), getStorageSlotName(i));
         }
     }
 }
 
-//move dari crafting grid ke inventory
+//move from crafting grid ke inventory
 void Menu::MoveFromCraft(string src, string dest) 
 {
     int i = checkId(src, "CRAFT");
     int j = checkId(dest, "INVENTORY");
-    Item *s = craftingGrid[i].first;
-    Item *d = storage[j].first;
+    Item *s = getCraftElmtAtIdx(i);
+    Item *d = getStorageElmtAtIdx(j);
+    
+    //move empty item to something
     if(s->getName() == "-")
     {
-        throw("Not available");
+        throw ("Not available");
     }
+    //if the dest is empty
     if(d->getName()=="-")
     {
+        //move nontool to dest
         if(s->isNontool())
         {
-            storage[j] = make_pair(new Nontools(s->getId(), s->getName(), s->getCategory(), 1),this->storage[j].second);
-            this->craftingGrid[i].first->addQuantity(-1);
-            if(craftingGrid[i].first->getQuantity()<=0)
+            setStorageAtIdx(j, new Nontools(s->getId(), s->getName(), s->getCategory(), 1), getStorageSlotName(j));
+            s->addQuantity(-1);
+            //after remove if the qrt < 0 then remove
+            if(s->getQuantity()<=0)
             {
-              this->craftingGrid[i] = make_pair(new Item(),this->craftingGrid[i].second);
+              setCraftingGridAtIdx(i, new Item(), getCraftSlotName(i));
             }
         }
-        else //tools
+        //source is tools
+        else
         {
-            storage[j] = make_pair(new Tools(s->getId(), s->getName(), s->getCategory(), s->getDurability()),this->storage[j].second);
-            this->craftingGrid[i] = make_pair(new Item(),this->craftingGrid[i].second);
+            setStorageAtIdx(j, new Tools(s->getId(), s->getName(), s->getCategory(), s->getDurability()), getStorageSlotName(j));
+            setCraftingGridAtIdx(i, new Tools(), getCraftSlotName(i));
         }
         
     }
+    //move the same item nontools
     else if(s->getId() == d->getId() && s->isNontool())
     {
         d->addQuantity(1);
-        this->craftingGrid[i].first->addQuantity(-1);
-        if(craftingGrid[i].first->getQuantity()<=0)
+        s->addQuantity(-1);
+        //if after remove qty <= 0 remove
+        if(s->getQuantity()<=0)
         {
-          this->craftingGrid[i] = make_pair(new Item(),this->craftingGrid[i].second);
+          setCraftingGridAtIdx(i, new Item(), getCraftSlotName(i));
         }
     }
     else
@@ -505,10 +524,11 @@ int Menu::getCraftingCols() {
   return (maxCol == -999) ? 0 : maxCol - minCol + 1;
 }
 
+//clear the craft
 void Menu::emptyCrafting()
 {
   for(int i = 0; i<craftingCapacity; i++)
   {
-    this->craftingGrid[i] = make_pair(new Item(), this->craftingGrid[i].second);
+    setCraftingGridAtIdx(i, new Item(), getCraftSlotName(i));
   }
 }

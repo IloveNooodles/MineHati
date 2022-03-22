@@ -21,14 +21,12 @@ public:
   Menu();
   ~Menu();
   Menu& operator=(const Menu& menu);
-  //TODO: make getter setter
   Item* getStorageElmtAtIdx(int);
   string getStorageSlotName(int);
   string getCraftSlotName(int);
   Item* getCraftElmtAtIdx(int);
   int getCraftingRows();
   int getCraftingCols();
-  //setter
   void setCraftingGridAtIdx(int, Item*, string);
   void setStorageAtIdx(int, Item*, string);
   int checkId(string Id, string array);
