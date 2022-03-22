@@ -18,6 +18,18 @@ Menu::~Menu() {
     delete[] this->storage;
     delete[] this->craftingGrid;
 }
+Menu& Menu::operator=(const Menu& menu) {
+  this->craftingCapacity = menu.craftingCapacity;
+  this->capacity = menu.capacity;
+  this->storage = new pair<Item*,string>[menu.capacity];
+  for (int i = 0;i < menu.capacity;i++) {
+    this->storage[i] = menu.storage[i];
+  }
+  this->craftingGrid = new pair<Item*,string>[menu.craftingCapacity];
+  for (int i = 0;i < menu.craftingCapacity;i++) {
+    this->craftingGrid[i] = menu.craftingGrid[i];
+  }  
+}
 int Menu::checkId(string Id) {
     return stoi(Id.substr(1));
 }
@@ -134,6 +146,9 @@ void Menu::give(ItemsReader &items, string name, int qty, int dura)
       i++;
     }
   }
+  else {
+    throw ("Bukan tools");
+  }
 }
 
 void Menu::give(ItemsReader &items, string name, int qty)
@@ -190,6 +205,9 @@ void Menu::give(ItemsReader &items, string name, int qty)
         }
       }
       i++;
+    }
+    if (qty > 0) {
+      throw ("Beberapa item tidak dapat dimasukkan karena sudah penuh");
     }
   }
 }
@@ -357,8 +375,7 @@ void Menu::Craft(ItemsReader& items, RecipesReader& recipes)
     }
   }
   if (!recipeFound && !fixedItem) {
-    /* Nanti ganti pakai exception */
-    cout << ">> Gagal melakukan crafting." << endl;
+    throw ("Gagal melakukan crafting");
   }
 }
 int Menu::getCraftingRows() {

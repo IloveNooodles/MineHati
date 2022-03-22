@@ -20,6 +20,7 @@ protected:
 public:
   Menu();
   ~Menu();
+  Menu& operator=(const Menu& menu);
   int checkId(string Id);
   void MoveToCraft(string src, int n, string* dest);
   void MoveFromCraft(string src, string dest);
