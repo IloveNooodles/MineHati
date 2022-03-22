@@ -32,6 +32,7 @@ public:
   void Show();
   void exportInventory(ItemsReader& items, string loc);
   pair<Item*,string> getElement(int i, int j);
+  void CraftMirror(ItemsReader& items, RecipesReader& recipes);
   void Craft(ItemsReader& items, RecipesReader& recipes);
   int getCraftingRows();
   int getCraftingCols();

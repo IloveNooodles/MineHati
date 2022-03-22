@@ -11,13 +11,13 @@ int main()
   ayam->give(items, "DIAMOND_AXE", 11, 7);
   ayam->Show();
   cout<<endl;
-  string dest[3] = {"C0", "C1", "C3"};
+  string dest[3] = {"C2", "C1", "C5"};
   string dest2[2] = {"C4", "C7"};
   ayam->MoveToCraft("I1", 3, dest);
   ayam->MoveToCraft("I4", 1, dest2);
   ayam->Show();
   cout<<endl;
-  ayam->MoveFromCraft("C0", "I1");
+  ayam->MoveFromCraft("C2", "I1");
   ayam->MoveFromCraft("C1", "I20");
   ayam->MoveFromCraft("C4", "I26");
   ayam->Show();
@@ -25,7 +25,7 @@ int main()
   ayam->MoveInventory("I0","I2");
   ayam->Discard("I2",12);
   ayam->Use("I3");
-  ayam->MoveFromCraft("C3", "I1");
+  ayam->MoveFromCraft("C5", "I1");
   ayam->Show();
   cout<<endl;
   ayam->MoveToCraft("I3", 1, dest);
@@ -36,8 +36,8 @@ int main()
   ayam->give(items, "STICK", 11);
   ayam->Show();
   cout<<endl;
-  ayam->MoveToCraft("I4", 2, dest2);
   ayam->MoveToCraft("I1", 3, dest);
+  ayam->MoveToCraft("I4", 2, dest2);
   ayam->Show();
   cout<<endl;
   ayam->Craft(items, recipes);

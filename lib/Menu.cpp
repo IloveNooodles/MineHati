@@ -30,19 +30,20 @@ Menu& Menu::operator=(const Menu& menu) {
   this->craftingGrid = new pair<Item*,string>[menu.craftingCapacity];
   for (int i = 0;i < menu.craftingCapacity;i++) {
     this->craftingGrid[i] = menu.craftingGrid[i];
-  }  
+  }
+  return *this;  
 }
 
 int Menu::checkId(string Id, string array) {
   int i = 0;
   if (array == "INVENTORY") {
-    int i = stoi(Id.substr(1));
+    i = stoi(Id.substr(1));
     if (i < 0 || i > 26) {
       throw ("ID not found"); 
     }
   }
-  if (array == "CRAFT") {
-    int i = stoi(Id.substr(1));
+  else if (array == "CRAFT") {
+    i = stoi(Id.substr(1));
     if (i < 0 || i > 8) {
       throw ("ID not found"); 
     }
@@ -291,7 +292,7 @@ void Menu::Craft(ItemsReader& items, RecipesReader& recipes)
   bool recipeFound = false;
   /* Cek apakah tipe yang harus membenarkan atau tidak */
   bool fixedItem = false;
-  int itemCount = 0; /* Banyak non tool */
+  int itemCount = 0; /* Banyak tool */
   int itemDura[] = {-1, -1};
   string itemName[] = {"-", "-"};
   for (int i = 0; i < 3 && itemCount < 2; i ++) {
@@ -363,6 +364,55 @@ void Menu::Craft(ItemsReader& items, RecipesReader& recipes)
     }
   }
   if (!recipeFound && !fixedItem) {
+    CraftMirror(items,recipes);
+  }
+}
+
+void Menu::CraftMirror(ItemsReader& items, RecipesReader& recipes)
+{
+  vector<Recipe> r = recipes.getRecipes();
+  bool recipeFound = false;
+  /* Cek setiap resep yang ada di recipe */
+  for (int x = 0; x < r.size(); x ++) {
+    vector<vector<string>> recipe = r[x].getRecipe();
+    int rows = r[x].getRows();
+    int cols = r[x].getCols();
+    if (rows != this->getCraftingRows() || cols != this->getCraftingCols()) {
+      continue;
+    }
+    /* Looping pada matrix c */
+    bool foundDifferent = false;
+    for (int i = 0; i < 3 - rows + 1 && !recipeFound; i ++) {
+      for (int j = 0; j < 3 - cols + 1 && !recipeFound; j ++) {
+        foundDifferent = false;
+        for (int k = 0; k < rows && !foundDifferent; k ++) {
+          for (int l = 0; l < cols && !foundDifferent; l ++) {
+            if (this->getElement(i + k, j + 2 - l).first->getName() != "-") {
+              string type = items.getType(this->getElement(i + k, j + 2 - l).first->getName());
+              if (type != "-") {
+                /* Ada tipenya */
+                foundDifferent = type != recipe[k][l];
+              } else {
+                /* Tidak ada tipenya */
+                foundDifferent = this->getElement(i + k, j + 2 - l).first->getName() != recipe[k][l];
+              }
+            } else {
+              foundDifferent = this->getElement(i + k, j + 2 - l).first->getName() != recipe[k][l];
+            }
+          }
+        }
+        /* k dan l out of range atau foundDifferent = true */
+        if (!foundDifferent) {
+          recipeFound = true; 
+        }
+      }
+    }
+    if (recipeFound) {
+      this->emptyCrafting();
+      give(items, r[x].getName(), r[x].getAmount());
+    }
+  }
+  if (!recipeFound) {
     throw ("Gagal melakukan crafting");
   }
 }
