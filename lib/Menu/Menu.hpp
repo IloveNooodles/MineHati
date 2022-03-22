@@ -21,6 +21,16 @@ public:
   Menu();
   ~Menu();
   Menu& operator=(const Menu& menu);
+  //TODO: make getter setter
+  Item* getStorageElmtAtIdx(int);
+  string getStorageSlotName(int);
+  string getCraftSlotName(int);
+  Item* getCraftElmtAtIdx(int);
+  int getCraftingRows();
+  int getCraftingCols();
+  //setter
+  void setCraftingGridAtIdx(int, Item*, string);
+  void setStorageAtIdx(int, Item*, string);
   int checkId(string Id, string array);
   void MoveToCraft(string src, int n, string* dest);
   void MoveFromCraft(string src, string dest);
@@ -34,8 +44,6 @@ public:
   pair<Item*,string> getElement(int i, int j);
   void CraftMirror(ItemsReader& items, RecipesReader& recipes);
   void Craft(ItemsReader& items, RecipesReader& recipes);
-  int getCraftingRows();
-  int getCraftingCols();
   void emptyCrafting();
 };
 #endif
