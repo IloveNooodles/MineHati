@@ -13,50 +13,41 @@ public:
 class CraftingFailedException : public BaseException
 {
 private:
-  BaseException *exc;
 
 public:
-  CraftingFailedException(BaseException *exc)
+  CraftingFailedException()
   {
-    this->exc = exc;
   }
   void what()
   {
     cout << "Crafting failed!" << endl;
-    exc->what();
   }
 };
 
 class PlacingFailedException : public BaseException
 {
 private:
-  BaseException *exc;
 
 public:
-  PlacingFailedException(BaseException *exc)
+  PlacingFailedException()
   {
-    this->exc = exc;
   }
   void what()
   {
     cout << "Move failed!" << endl;
-    exc->what();
   }
 };
 
 class InventoryFailedException : public BaseException
 {
 private:
-  BaseException *exc;
 
 public:
   InventoryFailedException(BaseException *exc)
   {
-    this->exc = exc;
   }
   void what()
   {
-    exc->what();
   }
 };
 

@@ -2,11 +2,11 @@
 #define __MENU_HPP__
 #include <iostream>
 #include <utility>
-#include "item.hpp"
-#include "nontools.hpp"
-#include "tools.hpp"
-#include "ItemsReader.hpp"
-#include "RecipesReader.hpp"
+#include "../Items/item.hpp"
+#include "../Items/nontools.hpp"
+#include "../Items/tools.hpp"
+#include "../IO/ItemsReader.hpp"
+#include "../IO/RecipesReader.hpp"
 using namespace std;
 
 class Menu
