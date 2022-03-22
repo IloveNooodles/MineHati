@@ -37,19 +37,6 @@ Menu& Menu::operator=(const Menu& menu) {
   return *this;  
 }
 
-//check if the slot is available or not
-//TODO: insert exception
-int Menu::checkId(string Id, string arrayType) {
-  int i = 0;
-  i = stoi(Id.substr(1));
-  if (arrayType == "INVENTORY" && (i < 0 || i > 26)) {
-      throw ("ID not found"); 
-  }else if (arrayType == "CRAFT" && (i < 0 || i > 8)) {
-      throw ("ID not found"); 
-  }
-  return i;
-}
-
 //getter storage elemt
 Item* Menu::getStorageElmtAtIdx(int index) {
   return this->storage[index].first;
@@ -70,6 +57,11 @@ string Menu::getCraftSlotName(int index) {
   return this->craftingGrid[index].second;
 }
 
+pair<Item*,string> Menu::getElement(int i, int j)
+{
+  return this->craftingGrid[3*i+j];
+}
+
 //setter storage elmt
 void Menu::setStorageAtIdx(int index, Item* i, string name) {
   this->storage[index] = make_pair(i, name);
@@ -78,6 +70,19 @@ void Menu::setStorageAtIdx(int index, Item* i, string name) {
 //setter craft elmt
 void Menu::setCraftingGridAtIdx(int index, Item* i, string name){
   this->craftingGrid[index] = make_pair(i, name);
+}
+
+//check if the slot is available or not
+//TODO: insert exception
+int Menu::checkId(string Id, string arrayType) {
+  int i = 0;
+  i = stoi(Id.substr(1));
+  if (arrayType == "INVENTORY" && (i < 0 || i > 26)) {
+      throw ("ID not found"); 
+  }else if (arrayType == "CRAFT" && (i < 0 || i > 8)) {
+      throw ("ID not found"); 
+  }
+  return i;
 }
 
 //TODO: insert exception
@@ -340,44 +345,46 @@ void Menu::Use(string Id)
 
 //show crafting grid and inv
 void Menu::Show() {
-    for (int i = 0;i < 3;i++) { //craftingGrid
-        for (int j = 0; j < this->craftingCapacity/3;j++) {
-            cout << "[" << this->craftingGrid[i*this->craftingCapacity/3 + j].second << " " << this->craftingGrid[i*this->craftingCapacity/3 + j].first->print() << "] ";
+    //show crafting grid
+    for (int i = 0; i < 3; i++) { //craftingGrid
+        int cols = this->craftingCapacity/3;
+        for (int j = 0; j < cols; j++) {
+          cout << "[" << getCraftSlotName(i*cols + j) << " " << getCraftElmtAtIdx(i*cols + j)->print() << "] ";
         }
         cout << endl;
     }
     cout << endl;
-    for (int i = 0;i < 3;i++) { //storage
-        for (int j = 0; j < this->capacity/3;j++) {
-            cout << "[" << this->storage[i*this->capacity/3 + j].second << " " << this->storage[i*this->capacity/3 + j].first->print() << "] ";
+    //show storage
+    for (int i = 0;i < 3;i++) {
+        int cols = this->capacity/3;
+        for (int j = 0; cols; j++) {
+          cout << "[" << getStorageSlotName(i * cols + j) << " " << getStorageElmtAtIdx(i * cols + j)->print() << "] ";
         }
         cout << endl;
     }
     cout << endl;
 }
+
+//export inventory to a file
 void Menu::exportInventory(ItemsReader& items, string loc) {
   ofstream file;
   file.open(loc);
   for (int i = 0; i < 27; i ++) {
-    string name = this->storage[i].first->getName();
+    Item *s = getStorageElmtAtIdx(i);
+    string name = s->getName();
     if (name == "-") {
       file << "0:0\n";
     } 
     else {
       if (items.getCtg(name) == "TOOL") {
-        file << items.getID(name) << ":" << this->storage[i].first->getDurability() << endl;
+        file << items.getID(name) << ":" << s->getDurability() << endl;
       } 
       else {
-        file << items.getID(name) << ":" << this->storage[i].first->getQuantity() << endl;
+        file << items.getID(name) << ":" << s->getQuantity() << endl;
       }
     }
   }
   file.close();
-}
-
-pair<Item*,string> Menu::getElement(int i, int j)
-{
-  return this->craftingGrid[3*i+j];
 }
 
 void Menu::Craft(ItemsReader& items, RecipesReader& recipes)
@@ -532,8 +539,8 @@ int Menu::getCraftingRows() {
 int Menu::getCraftingCols() {
   int minCol = 999;
   int maxCol = -999;
-  for (int i = 0; i < 3; i ++) {
-    for (int j = 0; j < 3; j ++) {
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
       if (this->getElement(i, j).first->getName() != "-") {
         if (j + 1 < minCol) {
           minCol = j + 1;
