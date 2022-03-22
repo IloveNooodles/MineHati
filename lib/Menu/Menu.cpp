@@ -185,37 +185,48 @@ void Menu::MoveFromCraft(string src, string dest)
         throw("Failed to move item");
     }
 }
+
+//move from inv to inv
 void Menu::MoveInventory(string src, string dest)
 {
     int i = checkId(src, "INVENTORY");
     int j = checkId(dest, "INVENTORY");
-    if (!this->storage[i].first->isNontool() && !this->storage[j].first->isNontool())
+    Item *s = getStorageElmtAtIdx(i);
+    Item *d = getStorageElmtAtIdx(j);
+    //move tools to tools
+    if (!s->isNontool() && !d->isNontool())
     {
         throw("Item yang ditumpuk bukan non-tools");
     }
-    int sisa = 64 - this->storage[j].first->getQuantity();
-    if (this->storage[i].first->getQuantity() <= sisa)
+    // leftover empty slot
+    int sisa = 64 - d->getQuantity();
+    if (s->getQuantity() <= sisa)
     {
-        this->storage[j].first->addQuantity(this->storage[i].first->getQuantity());
-        this->storage[i] = make_pair(new Item(), this->storage[i].second);
+        d->addQuantity(s->getQuantity());
+        setStorageAtIdx(i, new Item(), getStorageSlotName(i));
     }
     else
     {
-        this->storage[j].first->addQuantity(sisa);
-        this->storage[i].first->addQuantity(-1 * sisa);
+        d->addQuantity(sisa);
+        s->addQuantity(-1 * sisa);
     }
 }
+
+//add spesific tool to inv
 void Menu::give(ItemsReader &items, string name, int qty, int dura)
 {
   if (items.getCtg(name) == "TOOL")
   {
     /* Cari slot untuk dimasukkan tool */
     int i = 0;
+    //loop through the inv
     while (i < 27 && qty > 0)
     {
-      if (storage[i].first->getName() == "-")
+      Item *s = getStorageElmtAtIdx(i);
+      //if the slot is empty add the item
+      if (s->getName() == "-")
       {
-        this->storage[i] = make_pair(new Tools(items.getID(name), name, dura), this->storage[i].second);
+        setStorageAtIdx(i, new Tools(items.getID(name), name, dura), getStorageSlotName(i));
         qty--;
       }
       i++;
@@ -226,6 +237,7 @@ void Menu::give(ItemsReader &items, string name, int qty, int dura)
   }
 }
 
+//add item to inv
 void Menu::give(ItemsReader &items, string name, int qty)
 {
   if (items.getCtg(name) == "TOOL")
@@ -237,17 +249,18 @@ void Menu::give(ItemsReader &items, string name, int qty)
     int i = 0;
     while (i < 27 && qty > 0)
     {
-      if (storage[i].first->getName() == name)
+      Item *s = getStorageElmtAtIdx(i);
+      if (s->getName() == name)
       {
-        if (qty + storage[i].first->getQuantity() <= 64)
+        if (qty + s->getQuantity() <= 64)
         {
-          storage[i].first->addQuantity(qty);
+          s->addQuantity(qty);
           qty = 0;
         }
         else
         {
-          int sisa = 64 - storage[i].first->getQuantity();
-          storage[i].first->addQuantity(sisa);
+          int sisa = 64 - s->getQuantity();
+          s->addQuantity(sisa);
           qty -= sisa;
         }
       }
@@ -257,26 +270,29 @@ void Menu::give(ItemsReader &items, string name, int qty)
     i = 0;
     while (i < 27 && qty > 0)
     {
-      if (storage[i].first->getName() == "-")
+      Item *s = getStorageElmtAtIdx(i);
+      if (s->getName() == "-")
       {
         if (qty <= 64)
         {
-          storage[i] = make_pair(new Nontools(items.getID(name), name, items.getType(name), qty), this->storage[i].second);
+          setStorageAtIdx(i, new Nontools(items.getID(name), name, items.getType(name), qty), getStorageSlotName(i));
           qty = 0;
         }
         else
         {
-          storage[i] = make_pair(new Nontools(items.getID(name), name, items.getType(name), 64), this->storage[i].second);
+          setStorageAtIdx(i, new Nontools(items.getID(name), name, items.getType(name), 64), getStorageSlotName(i));
           qty -= 64;
         }
       }
       i++;
     }
     if (qty > 0) {
-      throw ("Beberapa item tidak dapat dimasukkan karena sudah penuh");
+      throw ("Some items cannot added to inventory because inventory is full");
     }
   }
 }
+
+//throw away item
 void Menu::Discard(string Id, int quantity)
 {
   if (quantity <= 0)
@@ -284,38 +300,45 @@ void Menu::Discard(string Id, int quantity)
     throw("non-positive integer");
   }
   int i = checkId(Id, "INVENTORY");
-  if (this->storage[i].first->isTool() == true)
+  Item *s = getStorageElmtAtIdx(i);
+  //if the slot item is tool then the qty is only 1
+  if (s->isTool())
   {
     if (quantity > 1)
     {
-      throw("Jumlah yang dibuang melebihi kuantitas");
+      throw ("the quantitiy is more than the amount");
     }
-    this->storage[i] = make_pair(new Item(), this->storage[i].second);
+    setStorageAtIdx(i, new Item(), getStorageSlotName(i));
   }
-  if (quantity > this->storage[i].first->getQuantity())
+  //if the quantity is more than amount
+  if (quantity > s->getQuantity())
   {
-    throw("Jumlah yang dibuang melebihi kuantitas");
+    throw("the quantitiy is more than the amount");
   }
-  this->storage[i].first->addQuantity((-1) * quantity);
-  if (this->storage[i].first->getQuantity() == 0)
+  s->addQuantity((-1) * quantity);
+  if (s->getQuantity() == 0)
   {
-    this->storage[i] = make_pair(new Item(), this->storage[i].second);
+    setStorageAtIdx(i, new Item(), getStorageSlotName(i));
   }
 }
 
+//use tools
 void Menu::Use(string Id)
 {
   int i = checkId(Id, "INVENTORY");
-  if (this->storage[i].first->isTool() == false)
+  Item *s = getStorageElmtAtIdx(i);
+  if (!s->isTool())
   {
-    throw("Bukan tools");
+    throw ("Nontools cannot be use");
   }
-  this->storage[i].first->decreaseDurability(1);
-  if (this->storage[i].first->getDurability() <= 0)
+  s->decreaseDurability(1);
+  if (s->getDurability() <= 0)
   {
-    this->storage[i] = make_pair(new Item(), this->storage[i].second);
+    setStorageAtIdx(i, new Item(), getStorageSlotName(i));
   }
 }
+
+//show crafting grid and inv
 void Menu::Show() {
     for (int i = 0;i < 3;i++) { //craftingGrid
         for (int j = 0; j < this->craftingCapacity/3;j++) {
