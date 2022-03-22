@@ -84,6 +84,10 @@ void Menu::MoveToCraft(string src, int n, string* dest) //move dari inventory ke
         }
         else
         {
+            if(this->craftingGrid[j].first->getName() != "-")
+            {
+                throw("salah satu petak telah terisi");
+            }
             craftingGrid[j] = make_pair(new Tools(s->getId(), s->getName(), s->getCategory(), s->getDurability()),this->craftingGrid[j].second);
             this->storage[i] = make_pair(new Item(),this->storage[i].second);
         }
@@ -104,17 +108,27 @@ void Menu::MoveFromCraft(string src, string dest) //move dari crafting grid ke i
         if(s->isNontool())
         {
             storage[j] = make_pair(new Nontools(s->getId(), s->getName(), s->getCategory(), 1),this->storage[j].second);
+            this->craftingGrid[i].first->addQuantity(-1);
+            if(craftingGrid[i].first->getQuantity()<=0)
+            {
+              this->craftingGrid[i] = make_pair(new Item(),this->craftingGrid[i].second);
+            }
         }
         else //tools
         {
             storage[j] = make_pair(new Tools(s->getId(), s->getName(), s->getCategory(), s->getDurability()),this->storage[j].second);
+            this->craftingGrid[i] = make_pair(new Item(),this->craftingGrid[i].second);
         }
-        this->craftingGrid[i] = make_pair(new Item(),this->craftingGrid[i].second);
+        
     }
     else if(s->getId() == d->getId() && s->isNontool())
     {
         d->addQuantity(1);
-        this->craftingGrid[i] = make_pair(new Item(),this->craftingGrid[i].second);
+        this->craftingGrid[i].first->addQuantity(-1);
+        if(craftingGrid[i].first->getQuantity()<=0)
+        {
+          this->craftingGrid[i] = make_pair(new Item(),this->craftingGrid[i].second);
+        }
     }
     else
     {

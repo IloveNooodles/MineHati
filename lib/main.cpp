@@ -19,6 +19,7 @@ int main()
   cout<<endl;
   ayam->MoveFromCraft("C2", "I1");
   ayam->MoveFromCraft("C1", "I20");
+  ayam->MoveFromCraft("C1", "I20");
   ayam->MoveFromCraft("C4", "I26");
   ayam->Show();
   cout<<endl;
