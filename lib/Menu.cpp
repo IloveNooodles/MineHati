@@ -14,10 +14,12 @@ Menu::Menu() {
         this->storage[i] = make_pair(new Item(),"I" + to_string(i));
     }
 }
+
 Menu::~Menu() {
     delete[] this->storage;
     delete[] this->craftingGrid;
 }
+
 Menu& Menu::operator=(const Menu& menu) {
   this->craftingCapacity = menu.craftingCapacity;
   this->capacity = menu.capacity;
@@ -30,26 +32,34 @@ Menu& Menu::operator=(const Menu& menu) {
     this->craftingGrid[i] = menu.craftingGrid[i];
   }  
 }
-int Menu::checkId(string Id) {
-    return stoi(Id.substr(1));
+
+int Menu::checkId(string Id, string array) {
+  int i = 0;
+  if (array == "INVENTORY") {
+    int i = stoi(Id.substr(1));
+    if (i < 0 || i > 26) {
+      throw ("ID not found"); 
+    }
+  }
+  if (array == "CRAFT") {
+    int i = stoi(Id.substr(1));
+    if (i < 0 || i > 8) {
+      throw ("ID not found"); 
+    }
+  }
+  return i;
 }
+
 void Menu::MoveToCraft(string src, int n, string* dest) //move dari inventory ke crafting grid
 {
-    int i = checkId(src);
-    if (i < 0 || i > 26) {
-        throw ("ID not found"); 
-    }
+    int i = checkId(src, "INVENTORY");
     if(this->storage[i].first->getName()=="-" ||(this->storage[i].first->isTool()&&n>1))
     {
         throw("Not available");
     }
     for(int k=0; k<n; k++)
     {
-        int j = checkId(dest[k]);
-        if (j < 0 || j > 8) 
-        {
-            throw ("ID not found"); 
-        }   
+        int j = checkId(dest[k], "CRAFT");
         Item *s = storage[i].first;
         if(this->craftingGrid[j].first->getName() != "-")
         {
@@ -73,13 +83,10 @@ void Menu::MoveToCraft(string src, int n, string* dest) //move dari inventory ke
 }
 void Menu::MoveFromCraft(string src, string dest) //move dari crafting grid ke inventory
 {
-    int i = checkId(src);
-    int j = checkId(dest);
+    int i = checkId(src, "CRAFT");
+    int j = checkId(dest, "INVENTORY");
     Item *s = craftingGrid[i].first;
     Item *d = storage[j].first;
-    if (i < 0 || i > 9 || j < 0 || j > 26) {
-        throw ("ID not found"); 
-    }
     if(s->getName() == "-")
     {
         throw("Not available");
@@ -108,12 +115,8 @@ void Menu::MoveFromCraft(string src, string dest) //move dari crafting grid ke i
 }
 void Menu::MoveInventory(string src, string dest)
 {
-    int i = checkId(src);
-    int j = checkId(dest);
-    if (i < 0 || i > 26 || j < 0 || j > 26)
-    {
-        throw("ID not found");
-    }
+    int i = checkId(src, "INVENTORY");
+    int j = checkId(dest, "INVENTORY");
     if (!this->storage[i].first->isNontool() && !this->storage[j].first->isNontool())
     {
         throw("Item yang ditumpuk bukan non-tools");
@@ -155,16 +158,7 @@ void Menu::give(ItemsReader &items, string name, int qty)
 {
   if (items.getCtg(name) == "TOOL")
   {
-    int i = 0;
-    while (i < 27 && qty > 0)
-    {
-      if (storage[i].first->getName() == "-")
-      {
-        this->storage[i] = make_pair(new Tools(items.getID(name), name, 10), this->storage[i].second);
-        qty--;
-      }
-      i++;
-    }
+    give(items, name, qty, 10);
   }
   else if (items.getCtg(name) == "NONTOOL")
   {
@@ -217,11 +211,7 @@ void Menu::Discard(string Id, int quantity)
   {
     throw("non-positive integer");
   }
-  int i = stoi(Id.substr(1));
-  if (i < 0 || i > 26)
-  {
-    throw("ID not found");
-  }
+  int i = checkId(Id, "INVENTORY");
   if (this->storage[i].first->isTool() == true)
   {
     if (quantity > 1)
@@ -243,11 +233,7 @@ void Menu::Discard(string Id, int quantity)
 
 void Menu::Use(string Id)
 {
-  int i = stoi(Id.substr(1));
-  if (i < 0 || i > 26)
-  {
-    throw("Jumlah yang dibuang melebihi kuantitas");
-  }
+  int i = checkId(Id, "INVENTORY");
   if (this->storage[i].first->isTool() == false)
   {
     throw("Bukan tools");
@@ -293,10 +279,12 @@ void Menu::exportInventory(ItemsReader& items, string loc) {
   }
   file.close();
 }
+
 pair<Item*,string> Menu::getElement(int i, int j)
 {
   return this->craftingGrid[3*i+j];
 }
+
 void Menu::Craft(ItemsReader& items, RecipesReader& recipes)
 {
   vector<Recipe> r = recipes.getRecipes();
@@ -378,6 +366,7 @@ void Menu::Craft(ItemsReader& items, RecipesReader& recipes)
     throw ("Gagal melakukan crafting");
   }
 }
+
 int Menu::getCraftingRows() {
   int minRow = 999;
   int maxRow = -999;
@@ -395,6 +384,7 @@ int Menu::getCraftingRows() {
   }
   return (maxRow == -999) ? 0 : maxRow - minRow + 1;
 }
+
 int Menu::getCraftingCols() {
   int minCol = 999;
   int maxCol = -999;
@@ -412,6 +402,7 @@ int Menu::getCraftingCols() {
   }
   return (maxCol == -999) ? 0 : maxCol - minCol + 1;
 }
+
 void Menu::emptyCrafting()
 {
   for(int i = 0; i<craftingCapacity; i++)

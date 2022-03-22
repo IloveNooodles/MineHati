@@ -21,7 +21,7 @@ public:
   Menu();
   ~Menu();
   Menu& operator=(const Menu& menu);
-  int checkId(string Id);
+  int checkId(string Id, string array);
   void MoveToCraft(string src, int n, string* dest);
   void MoveFromCraft(string src, string dest);
   void MoveInventory(string src, string dest);
