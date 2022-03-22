@@ -54,26 +54,33 @@ int Menu::checkId(string Id, string array) {
 void Menu::MoveToCraft(string src, int n, string* dest) //move dari inventory ke crafting grid
 {
     int i = checkId(src, "INVENTORY");
-    if(this->storage[i].first->getName()=="-" ||(this->storage[i].first->isTool()&&n>1))
+    Item *s = storage[i].first;
+    if(this->storage[i].first->getName()=="-" ||(this->storage[i].first->isTool()&&n>1) || this->storage[i].first->getName() != s->getName())
     {
         throw("Not available");
     }
     for(int k=0; k<n; k++)
     {
         int j = checkId(dest[k], "CRAFT");
-        Item *s = storage[i].first;
-        if(this->craftingGrid[j].first->getName() != "-")
+        if(s->isNontool())
         {
-            throw("salah satu petak telah terisi");
-        }
-        if(storage[i].first->isNontool())
-        {
-            craftingGrid[j] = make_pair(new Nontools(s->getId(), s->getName(), s->getCategory(), 1),this->craftingGrid[j].second);
-            s->addQuantity(-1);
-            if(s->getQuantity()==0)
+          if(craftingGrid[j].first->getName() == s->getName())
+          {
+            if(craftingGrid[j].first->getQuantity()>=64)
             {
-                this->storage[i] = make_pair(new Item(),this->storage[i].second);
+              throw("Slot is full");
             }
+            craftingGrid[j].first->addQuantity(1);
+          }
+          else
+          {
+            craftingGrid[j] = make_pair(new Nontools(s->getId(), s->getName(), s->getCategory(), 1),this->craftingGrid[j].second);
+          }
+          s->addQuantity(-1);
+          if(s->getQuantity()==0)
+          {
+              this->storage[i] = make_pair(new Item(),this->storage[i].second);
+          }
         }
         else
         {

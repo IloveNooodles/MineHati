@@ -1,4 +1,4 @@
-#include "Menu.hpp"
+#include "Menu\Menu.hpp"
 
 int main()
 {
@@ -11,9 +11,9 @@ int main()
   ayam->give(items, "DIAMOND_AXE", 11, 7);
   ayam->Show();
   cout<<endl;
-  string dest[3] = {"C2", "C1", "C5"};
+  string dest[4] = {"C2", "C1", "C5", "C1"};
   string dest2[2] = {"C4", "C7"};
-  ayam->MoveToCraft("I1", 3, dest);
+  ayam->MoveToCraft("I1", 4, dest);
   ayam->MoveToCraft("I4", 1, dest2);
   ayam->Show();
   cout<<endl;

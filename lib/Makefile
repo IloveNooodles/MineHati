@@ -1,5 +1,5 @@
 compile-main:
-	g++ -std=c++17 .\main.cpp .\Nontools.cpp .\Item.cpp .\Tools.cpp .\Menu.cpp -o main
+	g++ -std=c++17 .\main.cpp .\Items\Nontools.cpp .\Items\Item.cpp .\Items\Tools.cpp .\Menu\Menu.cpp -o main
 
 compile-item:
 	g++ -std=c++17 .\main_item.cpp .\Item.cpp .\Tools.cpp .\Nontools.cpp -o main_item
