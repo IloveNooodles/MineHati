@@ -1,9 +1,10 @@
 #ifndef __NONTOOLS_HPP_
 #define __NONTOOLS_HPP_
+#include "../Exception/Exception.hpp"
 #include "item.hpp"
 
-class Nontools : public Item
-{
+
+class Nontools : public Item {
 private:
   int quantity;
 
