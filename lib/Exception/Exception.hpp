@@ -23,7 +23,7 @@ public:
     cout << "IO Failed!" << endl;
     exc->what();
   }
-}
+};
 
 // Command runtime exception
 class CommandException : public BaseException {
@@ -41,7 +41,7 @@ public:
     cout << "Command " << command << " Failed!" << endl;
     exc->what();
   }
-}
+};
 
 // General
 class InvalidNumberException : public BaseException {
@@ -74,8 +74,28 @@ public:
     this->args = args;
   }
   void what() {
-    cout << this->args << " is an invalid args for command " this->command
+    cout << this->args << " is an invalid args for command " << this->command
          << endl;
+  }
+};
+
+class FileNotFoundException : public BaseException {
+private:
+  string fileName;
+
+public:
+  FileNotFoundException(string fileName) { this->fileName = fileName; }
+  void what() { cout << this->fileName << " is not found " << endl; }
+};
+
+class WrongFileFormatException : public BaseException {
+private:
+  string fileName;
+
+public:
+  WrongFileFormatException(string fileName) { this->fileName = fileName; }
+  void what() {
+    cout << this->fileName << " is not in the correct format " << endl;
   }
 };
 
@@ -102,6 +122,57 @@ public:
   }
 };
 
+class NotEnoughItemException : public BaseException {
+private:
+  Item *item;
+  int needed;
+
+public:
+  NotEnoughItemException(Item *item, int needed) {
+    this->needed = needed;
+    this->item = item;
+    this->available = item->getQuantity();
+  }
+  void what() {
+    cout << "Item " << this->item->getName() << " qty is less than "
+         << this->needed << " (only available " << this->available << ")"
+         << endl;
+  }
+};
+
+class ItemStackOverflowException : public BaseException {
+private:
+  item *item;
+  int addedQuantity;
+
+public:
+  ItemStackOverflowException(item *item, int addedQuantity) {
+    this->item = item;
+    this->addedQuantity = addedQuantity;
+  }
+  void what() {
+    cout << "Item Stack " << this->item->getName() << " is full (currently "
+         << this->item->getQuantity() << ") , cannot add "
+         << this->addedQuantity << " more" << endl;
+  }
+};
+
+class DifferentItemException : public BaseException {
+private:
+  Item *item1;
+  Item *item2;
+
+public:
+  DifferentItemException(Item *item1, Item *item2) {
+    this->item1 = item1;
+    this->item2 = item2;
+  }
+  void what() {
+    cout << "Item " << this->item1->getName() << " is different from "
+         << this->item2->getName() << endl;
+  }
+};
+
 // Crafting
 class NoRecipeFoundException : public BaseException {
 public:
@@ -125,40 +196,6 @@ public:
   void what() { cout << "Invalid slot id " << this->slot << endl; }
 };
 
-class NoItemInSlotException : public BaseException {
-private:
-  Item *item;
-  string slot;
-
-public:
-  NoItemInSlotException(Item *item, string slot) {
-    this->item = item;
-    this->slot = slot;
-  }
-  void what() {
-    cout << "No item " << this->item->getName() << " in " << this->slot << endl;
-  }
-};
-
-class NotEnoughItemException : public BaseException {
-private:
-  Item *item;
-  int needed;
-  int available;
-
-public:
-  NotEnoughItemException(Item *item, int needed, int available) {
-    this->needed = needed;
-    this->item = item;
-    this->available = available;
-  }
-  void what() {
-    cout << "Item " << this->item->getName() << " qty is less than "
-         << this->needed << " (only available " << this->available << ")"
-         << endl;
-  }
-};
-
 class EmptySlotException : public BaseException {
 private:
   string slot;
@@ -166,5 +203,16 @@ private:
 public:
   EmptySlotException(string slot) { this->slot = slot; }
   void what() { cout << "Slot " << this->slot << " is empty!" << endl; }
+};
+
+class SlotIsOccupiedException : public BaseException {
+private:
+  string slot;
+
+public:
+  SlotIsOccupiedException(string slot) { this->slot = slot; }
+  void what() {
+    cout << "Slot " << this->slot << " is already occupied!" << endl;
+  }
 };
 #endif
