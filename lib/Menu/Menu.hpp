@@ -29,7 +29,7 @@ public:
   int getCraftingCols();
   void setCraftingGridAtIdx(int, Item*, string);
   void setStorageAtIdx(int, Item*, string);
-  int checkId(string Id, string array);
+  int checkId(string Id);
   void MoveToCraft(string src, int n, string* dest);
   void MoveFromCraft(string src, string dest);
   void MoveInventory(string src, string dest);

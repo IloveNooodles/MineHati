@@ -1,4 +1,19 @@
+#ifndef __GAME_HPP_
+#define __GAME_HPP_
 #include "../Menu/Menu.hpp"
 using namespace std;
 
-//ini aing kasih template ra <3
+class Game {
+    private:
+        Menu* menu;
+        ItemsReader* items;
+        RecipesReader* recipe;
+        bool gameEnd;
+    public:
+        Game();
+        void StartGame();
+        string askCommand();
+        void process(string);
+};
+
+#endif

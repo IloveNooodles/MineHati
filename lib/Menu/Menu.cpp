@@ -74,12 +74,12 @@ void Menu::setCraftingGridAtIdx(int index, Item* i, string name){
 
 //check if the slot is available or not
 //TODO: insert exception
-int Menu::checkId(string Id, string arrayType) {
+int Menu::checkId(string Id) {
   int i = 0;
   i = stoi(Id.substr(1));
-  if (arrayType == "INVENTORY" && (i < 0 || i > 26)) {
+  if (Id[0] == 'I' && (i < 0 || i > 26)) {
       throw ("ID not found"); 
-  }else if (arrayType == "CRAFT" && (i < 0 || i > 8)) {
+  }else if (Id[0] == 'C' && (i < 0 || i > 8)) {
       throw ("ID not found"); 
   }
   return i;
@@ -88,7 +88,7 @@ int Menu::checkId(string Id, string arrayType) {
 //TODO: insert exception
 void Menu::MoveToCraft(string src, int qty, string* dest) //move dari inventory ke crafting grid
 {
-    int i = checkId(src, "INVENTORY");
+    int i = checkId(src);
     Item *s = getStorageElmtAtIdx(i);
     // if element is empty or move tool > 1
     if(s->getName()=="-" ||(s->isTool() && qty > 1))
@@ -98,7 +98,10 @@ void Menu::MoveToCraft(string src, int qty, string* dest) //move dari inventory 
     //loop the destination slot and check if slot is empty
     for(int k = 0; k < qty; k++)
     {
-        int j = checkId(dest[k], "CRAFT");
+        if(dest[k][0] != 'C') {
+          throw ("SLOT NOT FOUND");
+        }
+        int j = checkId(dest[k]);
         Item *crft = getCraftElmtAtIdx(j);
         //if item in s in nontool
         if(s->isNontool())
@@ -142,8 +145,8 @@ void Menu::MoveToCraft(string src, int qty, string* dest) //move dari inventory 
 //move from crafting grid ke inventory
 void Menu::MoveFromCraft(string src, string dest) 
 {
-    int i = checkId(src, "CRAFT");
-    int j = checkId(dest, "INVENTORY");
+    int i = checkId(src);
+    int j = checkId(dest);
     Item *s = getCraftElmtAtIdx(i);
     Item *d = getStorageElmtAtIdx(j);
     
@@ -194,8 +197,8 @@ void Menu::MoveFromCraft(string src, string dest)
 //move from inv to inv
 void Menu::MoveInventory(string src, string dest)
 {
-    int i = checkId(src, "INVENTORY");
-    int j = checkId(dest, "INVENTORY");
+    int i = checkId(src);
+    int j = checkId(dest);
     Item *s = getStorageElmtAtIdx(i);
     Item *d = getStorageElmtAtIdx(j);
     //move tools to tools
@@ -304,7 +307,7 @@ void Menu::Discard(string Id, int quantity)
   {
     throw("non-positive integer");
   }
-  int i = checkId(Id, "INVENTORY");
+  int i = checkId(Id);
   Item *s = getStorageElmtAtIdx(i);
   //if the slot item is tool then the qty is only 1
   if (s->isTool())
@@ -330,7 +333,7 @@ void Menu::Discard(string Id, int quantity)
 //use tools
 void Menu::Use(string Id)
 {
-  int i = checkId(Id, "INVENTORY");
+  int i = checkId(Id);
   Item *s = getStorageElmtAtIdx(i);
   if (!s->isTool())
   {
