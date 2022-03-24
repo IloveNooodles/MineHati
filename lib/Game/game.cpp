@@ -24,8 +24,8 @@ void Game::StartGame() {
 }
 
 string Game::askCommand() {
-  vector<string> available = {"EXPORT", "CRAFT",   "GIVE", "MOVE",   "USE",
-                              "SHOW",   "DISCARD", "QUIT", "RECIPES"};
+  vector<string> available = {"EXPORT", "CRAFT",   "GIVE", "MOVE",    "USE",
+                              "SHOW",   "DISCARD", "QUIT", "RECIPES", "HELP"};
   while (!this->gameEnd) {
     string command;
     cout << "Masukkan command: ";
