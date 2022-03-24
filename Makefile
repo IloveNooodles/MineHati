@@ -9,8 +9,8 @@ SRCS     := $(filter-out check.cpp, $(ALL_SRCS))
 all: compile test check
 
 # Compile all cpp files except check.cpp
-compile:  
-	g++ -std=c++17 -o $(EXECUTABLE_FILENAME) $(SRCS) main.cpp
+compile:
+	g++ -std=c++17 -o main main.cpp lib/Game/game.cpp lib/Items/item.cpp lib/Items/nontools.cpp lib/Items/tools.cpp lib/Menu/Menu.cpp
 
 # run the program
 run:
