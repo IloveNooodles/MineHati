@@ -1,6 +1,5 @@
 #ifndef __RECIPESREADER_HPP__
 #define __RECIPESREADER_HPP__
-#include "../Exception/Exception.hpp"
 #include <filesystem>
 #include <fstream>
 #include <iomanip>

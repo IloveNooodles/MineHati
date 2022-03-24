@@ -177,14 +177,14 @@ public:
 // Crafting
 class NoRecipeFoundException : public BaseException {
 public:
-  NoRecipeFoundException();
+  NoRecipeFoundException() {}
   void what() { cout << "No recipe found for this combination!"; }
 };
 
 // Slot
 class InventoryFullException : public BaseException {
 public:
-  InventoryFullException();
+  InventoryFullException() {}
   void what() { cout << "Inventory is full!" << endl; }
 };
 
