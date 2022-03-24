@@ -16,11 +16,13 @@ Game::Game(string configPath) {
 }
 
 void Game::StartGame() {
+  cout << "Welcome to the MineHati!\nType HELP to get started.\n\n";
   while (!gameEnd) {
     string command = askCommand();
     process(command);
   }
 }
+
 string Game::askCommand() {
   vector<string> available = {"EXPORT", "CRAFT",   "GIVE", "MOVE",   "USE",
                               "SHOW",   "DISCARD", "QUIT", "RECIPES"};
@@ -60,7 +62,7 @@ void Game::process(string command) {
     int N;
     cin >> slot >> N;
     if (slot[0] == 'I') {
-      vector<string> dest(N + 1);
+      vector<string> dest;
       for (int i = 0; i < N; i++) {
         string desSlot;
         cin >> desSlot;
@@ -72,7 +74,7 @@ void Game::process(string command) {
         /* Pindah dari inventory ke inventory */
         this->menu->MoveToCraft(slot, N, dest);
       } else {
-        throw new InvalidSlotIDException(dest[0]);
+        throw new SlotInputInvalidException(slot);
       }
     } else if (slot[0] == 'C') {
       /* Pindahkan crafting ke inventory */
@@ -80,15 +82,30 @@ void Game::process(string command) {
       cin >> dest;
       this->menu->MoveFromCraft(slot, dest);
     }
-  } else if (command == "RECIPES") {
-    this->menu->showRecipes(*this->recipe);
   } else if (command == "CRAFT") {
     this->menu->Craft(*items, *recipe);
-  } else if (command == "EXPORT") {
+  }
+}
+else if (command == "RECIPES") {
+  this->menu->showRecipes(*this->recipe);
+  else if (command == "EXPORT") {
     string loc;
     cin >> loc;
     this->menu->exportInventory(*items, "./" + loc);
-  } else if (command == "QUIT") {
+  }
+  else if (command == "QUIT") {
     this->gameEnd = true;
+    cout << "Thank you for playing MineHati!\n";
+  }
+  else if (command == "HELP") {
+    cout << "\nAvailable commands:\n";
+    cout << "SHOW: Show inventory and craft\n";
+    cout << "DISCARD: Throw item in inventory with some quantitiy\n";
+    cout << "USE: Use tool in inventory\n";
+    cout << "GIVE: Give spesific item to with some quantitiy\n";
+    cout << "MOVE: Move item in craft and inventory\n";
+    cout << "CRAFT: Use craft to make new item\n";
+    cout << "EXPORT: Export inventory and craft into a .txt file\n";
+    cout << "QUIT: To exit the game\n\n";
   }
 }
