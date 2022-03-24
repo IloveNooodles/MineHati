@@ -34,6 +34,7 @@ string Game::askCommand() {
         }
         throw ("WRONG COMMAND");
     }
+    return "GAME END";
 }
 void Game::process(string command) {
     if (command == "SHOW") {
