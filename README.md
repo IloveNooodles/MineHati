@@ -26,9 +26,12 @@ To run this program in any operating system, you must have gcc that support c++1
 ## How to build
 1. Clone the directory using `git clone https://github.com/IloveNooodles/MineHati.git`
 1. Move to the directory using `cd` command
-1. In the program directory run `make compile run` to run the program
-1. After compiling, the program should appear in current directory
-1. run `./main` to run the program
+1. In the program directory run `make compile run` to run the program 
+
+Alternatively
+4. You can compile manually using `make compile`
+5. After compiling, the program should appear in current directory
+6. run `./main` to run the program
 
 ## Usage
 After run the program there are several commands that you could do. Type HELP to print all of the available commands

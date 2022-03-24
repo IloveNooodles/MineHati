@@ -1,7 +1,7 @@
-#include "RecipesReader.hpp"
+#include "../RecipesReader.hpp"
 
 int main() {
-  RecipesReader r("../../config/recipe");
+  RecipesReader r("../../../config/recipe");
   vector<Recipe> recipes = r.getRecipes();
   for (Recipe recipe : recipes) {
     cout << "=====================================" << endl;

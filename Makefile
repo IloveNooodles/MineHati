@@ -10,7 +10,7 @@ all: compile test check
 
 # Compile all cpp files except check.cpp
 compile:
-	g++ -std=c++17 -o main main.cpp lib/Game/game.cpp lib/Items/item.cpp lib/Items/nontools.cpp lib/Items/tools.cpp lib/Menu/Menu.cpp
+	g++ -std=c++17 -o main main.cpp ${ALL_SRCS}
 
 # run the program
 run:

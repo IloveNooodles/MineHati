@@ -1,4 +1,4 @@
-#include "Exception.hpp"
+#include "../Exception.hpp"
 #include <string>
 
 const string exceptionToTest = "FileNotFoundException";
