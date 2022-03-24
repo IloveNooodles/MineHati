@@ -75,10 +75,10 @@ int Menu::checkId(string Id, string arrayType) {
   int i = 0;
   i = stoi(Id.substr(1));
   string header = Id.substr(0, 1);
-  if (arrayType == "INVENTORY" || header == "C") {
+  if (arrayType == "INVENTORY" && header == "C") {
     throw new InvalidSlotIDException(Id);
   }
-  if (arrayType == "CRAFTING" || header == "I") {
+  if (arrayType == "CRAFT" && header == "I") {
     throw new InvalidSlotIDException(Id);
   }
 
@@ -331,7 +331,7 @@ void Menu::Show() {
   // show storage
   for (int i = 0; i < 3; i++) {
     int cols = this->capacity / 3;
-    for (int j = 0; cols; j++) {
+    for (int j = 0; j < cols; j++) {
       cout << "[" << getStorageSlotName(i * cols + j) << " "
            << getStorageElmtAtIdx(i * cols + j)->print() << "] ";
     }

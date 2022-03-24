@@ -4,7 +4,7 @@ int main()
 {
   Menu *ayam = new Menu();
   ItemsReader items("../config/item.txt");
-  RecipesReader recipes("../config/item/recipe");
+  RecipesReader recipes("../config/recipe");
   ayam->give(items, "OAK_LOG", 41);
   ayam->give(items, "DIAMOND", 8);
   ayam->give(items, "OAK_LOG", 25);
