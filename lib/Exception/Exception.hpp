@@ -217,29 +217,4 @@ public:
   }
 };
 
-/* Game */
-class WrongCommandException : public BaseException {
-private:
-  string command;
-public:
-  WrongCommandException(string command) {
-    this->command = command;
-  }
-  void what() {
-    cout << this->command << " is an invalid command!" << endl;
-  }
-};
-
-class SlotInputInvalidException : public BaseException {
-private:
-  string slot;
-public:
-  SlotInputInvalidException(string slot) {
-    this->slot = slot;
-  }
-  void what() {
-    cout << this->slot << " is an invalid slot!" << endl;
-  }
-};
-
 #endif

@@ -90,8 +90,9 @@ int Menu::checkId(string Id, string arrayType) {
   return i;
 }
 
-void Menu::MoveToCraft(string src, int qty,
-                       vector<string> dest) // move dari inventory ke crafting grid
+void Menu::MoveToCraft(
+    string src, int qty,
+    vector<string> dest) // move dari inventory ke crafting grid
 {
   int i = checkId(src, "INVENTORY");
   Item *s = getStorageElmtAtIdx(i);
@@ -544,5 +545,19 @@ int Menu::getCraftingCols() {
 void Menu::emptyCrafting() {
   for (int i = 0; i < craftingCapacity; i++) {
     setCraftingGridAtIdx(i, new Item(), getCraftSlotName(i));
+  }
+}
+
+void Menu::showRecipes(RecipesReader &recipes) {
+  vector<Recipe> r = recipes.getRecipes();
+  for (int i = 0; i < r.size(); i++) {
+    cout << r[i].getName() << ": " << r[i].getAmount() << endl;
+    for (int j = 0; j < r[i].getRows(); j++) {
+      for (int k = 0; k < r[i].getCols(); k++) {
+        cout << r[i].getRecipe()[j][k] << "\t";
+      }
+      cout << endl;
+    }
+    cout << endl;
   }
 }
