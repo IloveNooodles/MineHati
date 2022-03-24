@@ -1,6 +1,5 @@
 #ifndef __ITEMREADER_HPP_
 #define __ITEMREADER_HPP_
-#include "../Exception/Exception.hpp"
 #include <filesystem>
 #include <fstream>
 #include <iomanip>

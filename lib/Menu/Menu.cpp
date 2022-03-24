@@ -1,6 +1,4 @@
 #include "Menu.hpp"
-#include "../Exception/Exception.hpp"
-#include <typeinfo>
 
 Menu::Menu() {
   this->craftingCapacity = 9; // init craftingGrid
@@ -111,7 +109,7 @@ void Menu::MoveToCraft(string src, int qty,
       if (crft->getName() == s->getName()) {
         // if the slot have over 64 qty else add 1
         if (crft->getQuantity() >= 64) {
-          throw new ItemStackOverflowException(crft);
+          throw new ItemStackOverflowException(crft, 1);
         }
         crft->addQuantity(1);
       }

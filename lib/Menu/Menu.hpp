@@ -2,6 +2,8 @@
 #define __MENU_HPP__
 #include <iostream>
 #include <utility>
+#include <typeinfo>
+#include "../Exception/Exception.hpp"
 #include "../Items/item.hpp"
 #include "../Items/nontools.hpp"
 #include "../Items/tools.hpp"

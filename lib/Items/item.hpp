@@ -1,8 +1,8 @@
-#include <string>
-using namespace std;
-
 #ifndef __ITEM_HPP_
 #define __ITEM_HPP_
+
+#include <string>
+using namespace std;
 
 /*
 TYPE
