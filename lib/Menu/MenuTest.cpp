@@ -2,8 +2,8 @@
 
 int main() {
   Menu menu;
-  ItemsReader items = ItemsReader("config/item.txt");
-  RecipesReader recipes = RecipesReader("config/recipe");
+  ItemsReader items = ItemsReader("../../config/item.txt");
+  RecipesReader recipes = RecipesReader("../../config/recipe");
   menu.Show();
   menu.give(items, "OAK_PLANK", 1);
   menu.give(items, "BIRCH_PLANK", 2);
