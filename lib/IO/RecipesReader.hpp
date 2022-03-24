@@ -56,7 +56,7 @@ public:
             string r;
             inFile >> r;
             if (r == "\x00") {
-              throw new WrongFileFormatException(file.path());
+              throw new WrongFileFormatException(file.path().u8string());
             }
             tmp.push_back(r);
           }

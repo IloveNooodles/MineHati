@@ -126,6 +126,7 @@ class NotEnoughItemException : public BaseException {
 private:
   Item *item;
   int needed;
+  int available;
 
 public:
   NotEnoughItemException(Item *item, int needed) {
@@ -142,11 +143,11 @@ public:
 
 class ItemStackOverflowException : public BaseException {
 private:
-  item *item;
+  Item *item;
   int addedQuantity;
 
 public:
-  ItemStackOverflowException(item *item, int addedQuantity) {
+  ItemStackOverflowException(Item *item, int addedQuantity) {
     this->item = item;
     this->addedQuantity = addedQuantity;
   }
