@@ -16,13 +16,15 @@ Game::Game(string configPath) {
 }
 
 void Game::StartGame() {
+    cout << "Welcome to the MineHati!\nType HELP to get started.\n\n";
     while(!gameEnd) {
         string command = askCommand();
         process(command);
     }
 }
+
 string Game::askCommand() {
-    vector<string> available = {"EXPORT", "CRAFT", "GIVE", "MOVE", "USE", "SHOW", "DISCARD", "QUIT"};
+    vector<string> available = {"EXPORT", "CRAFT", "GIVE", "MOVE", "USE", "SHOW", "DISCARD", "QUIT", "HELP"};
     while (true) {
         string command;
         cout << "Masukkan command: ";
@@ -95,5 +97,17 @@ void Game::process(string command) {
     }
     else if (command == "QUIT") {
         this->gameEnd = true;
-    }
+        cout << "Thank you for playing MineHati!\n";
+    } 
+    else if(command == "HELP") {
+        cout << "\nAvailable commands:\n";
+        cout << "SHOW: Show inventory and craft\n";
+        cout << "DISCARD: Throw item in inventory with some quantitiy\n";
+        cout << "USE: Use tool in inventory\n";
+        cout << "GIVE: Give spesific item to with some quantitiy\n";
+        cout << "MOVE: Move item in craft and inventory\n";
+        cout << "CRAFT: Use craft to make new item\n";
+        cout << "EXPORT: Export inventory and craft into a .txt file\n";
+        cout << "QUIT: To exit the game\n\n";
+    } 
 }
