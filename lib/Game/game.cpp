@@ -18,8 +18,13 @@ Game::Game(string configPath) {
 void Game::StartGame() {
   cout << "Welcome to the MineHati!\nType HELP to get started.\n\n";
   while (!gameEnd) {
-    string command = askCommand();
-    process(command);
+    try {
+      string command = askCommand();
+      process(command);
+    } catch (BaseException* e) {
+      e->what();
+      cout << endl;
+    }
   }
 }
 
@@ -85,9 +90,9 @@ void Game::process(string command) {
   } else if (command == "CRAFT") {
     this->menu->Craft(*items, *recipe);
   }
-}
-else if (command == "RECIPES") {
-  this->menu->showRecipes(*this->recipe);
+  else if (command == "RECIPES") {
+    this->menu->showRecipes(*this->recipe);
+  }
   else if (command == "EXPORT") {
     string loc;
     cin >> loc;
@@ -100,12 +105,13 @@ else if (command == "RECIPES") {
   else if (command == "HELP") {
     cout << "\nAvailable commands:\n";
     cout << "SHOW: Show inventory and craft\n";
-    cout << "DISCARD: Throw item in inventory with some quantitiy\n";
+    cout << "DISCARD: Throw item in inventory with some quantity\n";
     cout << "USE: Use tool in inventory\n";
-    cout << "GIVE: Give spesific item to with some quantitiy\n";
+    cout << "GIVE: Give spesific item to with some quantity\n";
     cout << "MOVE: Move item in craft and inventory\n";
     cout << "CRAFT: Use craft to make new item\n";
     cout << "EXPORT: Export inventory and craft into a .txt file\n";
+    cout << "RECIPES: See all available recipe\n";
     cout << "QUIT: To exit the game\n\n";
   }
 }
