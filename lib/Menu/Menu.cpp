@@ -194,7 +194,7 @@ void Menu::MoveInventory(string src, string dest) {
   Item *s = getStorageElmtAtIdx(i);
   Item *d = getStorageElmtAtIdx(j);
   // move tools to tools
-  if (!s->isNontool() && !d->isNontool()) {
+  if (!s->isNontool() || !d->isNontool()) {
     if (!s->isNontool()) {
       throw new WrongItemTypeException(s);
     } else {

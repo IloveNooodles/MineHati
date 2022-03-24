@@ -4,8 +4,8 @@ using namespace std;
 Game::Game() {
     this->menu = new Menu();
     this->gameEnd = false;
-    this->items = new ItemsReader("../../config/item.txt");
-    this->recipe = new RecipesReader("../../config/recipe");
+    this->items = new ItemsReader("config/item.txt");
+    this->recipe = new RecipesReader("config/recipe");
 }
 
 Game::Game(string filePath) {
@@ -23,7 +23,7 @@ void Game::StartGame() {
 }
 string Game::askCommand() {
     vector<string> available = {"EXPORT", "CRAFT", "GIVE", "MOVE", "USE", "SHOW", "DISCARD", "QUIT"};
-    while (!this->gameEnd) {
+    while (true) {
         string command;
         cout << "Masukkan command: ";
         cin >> command;
@@ -61,7 +61,7 @@ void Game::process(string command) {
         string slot; int N;
         cin >> slot >> N;
         if (slot[0] == 'I') {
-            vector<string> dest(N+1);
+            vector<string> dest;
             for (int i = 0; i < N;i++) {
                 string desSlot;
                 cin >> desSlot;
