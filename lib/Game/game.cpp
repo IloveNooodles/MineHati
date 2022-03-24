@@ -32,7 +32,7 @@ string Game::askCommand() {
                 return command;
             }
         }
-        throw ("WRONG COMMAND");
+        throw new WrongCommandException(command);
     }
     return "GAME END";
 }
@@ -75,7 +75,7 @@ void Game::process(string command) {
                 this->menu->MoveToCraft(slot, N, dest);
             }
             else {
-                throw ("SLOT NOT FOUND");
+                throw new SlotInputInvalidException(slot);
             }
         } 
         else if (slot[0] == 'C') {
