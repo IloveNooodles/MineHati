@@ -21,7 +21,12 @@ void Game::StartGame() {
     try {
       string command = askCommand();
       process(command);
-    } catch (BaseException* e) {
+    } catch (BaseException *e) {
+      // Clear cin
+      cin.clear();
+      cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+      // Output Exception
       e->what();
       cout << endl;
     }
@@ -79,7 +84,7 @@ void Game::process(string command) {
         /* Pindah dari inventory ke inventory */
         this->menu->MoveToCraft(slot, N, dest);
       } else {
-        throw new SlotInputInvalidException(slot);
+        throw new InvalidSlotIDException(dest[0]);
       }
     } else if (slot[0] == 'C') {
       /* Pindahkan crafting ke inventory */
@@ -89,20 +94,16 @@ void Game::process(string command) {
     }
   } else if (command == "CRAFT") {
     this->menu->Craft(*items, *recipe);
-  }
-  else if (command == "RECIPES") {
+  } else if (command == "RECIPES") {
     this->menu->showRecipes(*this->recipe);
-  }
-  else if (command == "EXPORT") {
+  } else if (command == "EXPORT") {
     string loc;
     cin >> loc;
     this->menu->exportInventory(*items, "./" + loc);
-  }
-  else if (command == "QUIT") {
+  } else if (command == "QUIT") {
     this->gameEnd = true;
     cout << "Thank you for playing MineHati!\n";
-  }
-  else if (command == "HELP") {
+  } else if (command == "HELP") {
     cout << "\nAvailable commands:\n";
     cout << "SHOW: Show inventory and craft\n";
     cout << "DISCARD: Throw item in inventory with some quantity\n";

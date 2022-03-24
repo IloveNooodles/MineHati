@@ -63,18 +63,6 @@ public:
   void what() { cout << this->command << " is an invalid command " << endl; }
 };
 
-class SlotInputInvalidException : public BaseException {
-private:
-  string slot;
-public:
-  SlotInputInvalidException(string slot) {
-    this->slot = slot;
-  }
-  void what() {
-    cout << this->slot << " is an invalid slot!" << endl;
-  }
-};
-
 class InvalidCommandArgsException : public BaseException {
 private:
   string command;
