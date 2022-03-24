@@ -4,24 +4,6 @@
 #include <string>
 using namespace std;
 
-/*
-TYPE
-LOG
-PLANK
--
-STONE
-*/
-
-/*
-DEFAULT VALUE
-id: -999
-name: "none"
-category: "none"
-*/
-
-static const string enum_category[] = {
-    "LOG", "PLANK", "STONE", "-"};
-
 class Item
 {
 protected:

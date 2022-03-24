@@ -106,13 +106,14 @@ void Game::process(string command) {
   } else if (command == "HELP") {
     cout << "\nAvailable commands:\n";
     cout << "SHOW: Show inventory and craft\n";
-    cout << "DISCARD: Throw item in inventory with some quantity\n";
-    cout << "USE: Use tool in inventory\n";
-    cout << "GIVE: Give spesific item to with some quantity\n";
-    cout << "MOVE: Move item in craft and inventory\n";
-    cout << "CRAFT: Use craft to make new item\n";
-    cout << "EXPORT: Export inventory and craft into a .txt file\n";
+    cout << "DISCARD <INVENTORY_SLOT_ID> <QUANTITY>: Throw item in inventory with some quantity\n";
+    cout << "USE <slot>: Use tool in inventory\n";
+    cout << "GIVE <ITEM_NAME> <QUANTITY>: Give spesific item to with some quantity\n";
+    cout << "MOVE <INVENTORY_SLOT_ID> N <CRAFT_SLOT_ID> / <INVENTORY_SLOT_ID> ...: Move item in craft and inventory\n";
+    cout << "CRAFT: Use craft to make new item that available in the recipe\n";
+    cout << "EXPORT <FILENAME>: Export inventory and craft into a file\n";
     cout << "RECIPES: See all available recipe\n";
+    cout << "HELP: To see list of commands\n";
     cout << "QUIT: To exit the game\n\n";
   }
 }
