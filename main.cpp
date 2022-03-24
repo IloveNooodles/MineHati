@@ -88,9 +88,10 @@
 
 int main()
 {
-    Game game;
+  try {
+    string configPath = "./config";
+    Game game(configPath);
     game.StartGame();
-    return 0;
   // Menu *ayam = new Menu();
   // ItemsReader items;
   // RecipesReader recipes;
@@ -134,4 +135,8 @@ int main()
   // ayam->Show();
   // cout<<endl;
   
+  } catch (BaseException *e) {
+    e->what();
+  }
+  return 0;
 }
