@@ -4,9 +4,17 @@ using namespace std;
 Game::Game() {
     this->menu = new Menu();
     this->gameEnd = false;
-    this->items = new ItemsReader();
-    this->recipe = new RecipesReader();
+    this->items = new ItemsReader("../../config/item.txt");
+    this->recipe = new RecipesReader("../../config/recipe");
 }
+
+Game::Game(string filePath) {
+  this->menu = new Menu();
+  this->gameEnd = false;
+  this->items = new ItemsReader(filePath);
+  this->recipe = new RecipesReader(filePath);
+}
+
 void Game::StartGame() {
     while(!gameEnd) {
         string command = askCommand();
@@ -15,7 +23,7 @@ void Game::StartGame() {
 }
 string Game::askCommand() {
     vector<string> available = {"EXPORT", "CRAFT", "GIVE", "MOVE", "USE", "SHOW", "DISCARD", "QUIT"};
-    while (true) {
+    while (!this->gameEnd) {
         string command;
         cout << "Masukkan command: ";
         cin >> command;
@@ -42,13 +50,21 @@ void Game::process(string command) {
         cin >> slot;
         this->menu->Use(slot);
     } 
+    else if (command == "GIVE") {
+      string name;
+      int qty;
+      cin >> name >> qty;
+      this->menu->give(*this->items, name, qty);
+    }
     else if (command == "MOVE") {
         string slot; int N;
         cin >> slot >> N;
         if (slot[0] == 'I') {
-            string dest[N+1];
+            vector<string> dest(N+1);
             for (int i = 0; i < N;i++) {
-                cin >> dest[i];
+                string desSlot;
+                cin >> desSlot;
+                dest.push_back(desSlot);
             }
             if (dest[0][0] == 'I') {
                 this->menu->MoveInventory(slot, dest[0]);
@@ -78,7 +94,5 @@ void Game::process(string command) {
     }
     else if (command == "QUIT") {
         this->gameEnd = true;
-    }
-    else { //GIVE
     }
 }

@@ -91,7 +91,7 @@ int Menu::checkId(string Id, string arrayType) {
 }
 
 void Menu::MoveToCraft(string src, int qty,
-                       string *dest) // move dari inventory ke crafting grid
+                       vector<string> dest) // move dari inventory ke crafting grid
 {
   int i = checkId(src, "INVENTORY");
   Item *s = getStorageElmtAtIdx(i);

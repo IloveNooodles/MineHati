@@ -32,7 +32,7 @@ public:
   void setCraftingGridAtIdx(int, Item*, string);
   void setStorageAtIdx(int, Item*, string);
   int checkId(string Id, string arrayType);
-  void MoveToCraft(string src, int n, string* dest);
+  void MoveToCraft(string src, int n, vector<string> dest);
   void MoveFromCraft(string src, string dest);
   void MoveInventory(string src, string dest);
   void give(ItemsReader& items, string name, int quantity, int dura);

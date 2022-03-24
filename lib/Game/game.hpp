@@ -11,6 +11,7 @@ class Game {
         bool gameEnd;
     public:
         Game();
+        Game(string filePath);
         void StartGame();
         string askCommand();
         void process(string);
