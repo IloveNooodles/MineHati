@@ -9,8 +9,12 @@ SRCS     := $(filter-out check.cpp, $(ALL_SRCS))
 all: compile test check
 
 # Compile all cpp files except check.cpp
-compile:
-	g++ -std=c++17 -o $(EXECUTABLE_FILENAME) $(SRCS)
+compile:  
+	g++ -std=c++17 -o $(EXECUTABLE_FILENAME) $(SRCS) main.cpp
+
+# run the program
+run:
+	./$(EXECUTABLE_FILENAME)
 
 # Test
 test: $(TC_FOLDER)/*.$(EXT_IN) $(EXECUTABLE_FILENAME)

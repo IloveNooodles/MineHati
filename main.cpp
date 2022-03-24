@@ -1,6 +1,56 @@
 #include "lib/Game/game.hpp"
 
-int main () {
-    Game g;
-    g.StartGame();
+int main()
+{
+  try {
+    string configPath = "./config";
+    Game game(configPath);
+    game.StartGame();
+  // Menu *ayam = new Menu();
+  // ItemsReader items;
+  // RecipesReader recipes;
+  // ayam->give(items, "OAK_LOG", 41);
+  // ayam->give(items, "DIAMOND", 8);
+  // ayam->give(items, "OAK_LOG", 25);
+  // ayam->give(items, "DIAMOND_AXE", 11, 7);
+  // ayam->Show();
+  // cout<<endl;
+  // string dest[4] = {"C2", "C1", "C5", "C1"};
+  // string dest2[2] = {"C4", "C7"};
+  // ayam->MoveToCraft("I1", 4, dest);
+  // ayam->MoveToCraft("I4", 1, dest2);
+  // ayam->Show();
+  // cout<<endl;
+  // ayam->MoveFromCraft("C2", "I1");
+  // ayam->MoveFromCraft("C1", "I20");
+  // ayam->MoveFromCraft("C1", "I20");
+  // ayam->MoveFromCraft("C4", "I26");
+  // ayam->Show();
+  // cout<<endl;
+  // ayam->MoveInventory("I0","I2");
+  // ayam->Discard("I2",12);
+  // ayam->Use("I3");
+  // ayam->MoveFromCraft("C5", "I1");
+  // ayam->Show();
+  // cout<<endl;
+  // ayam->MoveToCraft("I3", 1, dest);
+  // ayam->MoveToCraft("I5", 1, dest2);
+  // ayam->Show();
+  // cout<<endl;
+  // ayam->Craft(items, recipes);
+  // ayam->give(items, "STICK", 11);
+  // ayam->Show();
+  // cout<<endl;
+  // ayam->MoveToCraft("I1", 3, dest);
+  // ayam->MoveToCraft("I4", 2, dest2);
+  // ayam->Show();
+  // cout<<endl;
+  // ayam->Craft(items, recipes);
+  // ayam->Show();
+  // cout<<endl;
+  
+  } catch (BaseException *e) {
+    e->what();
+  }
+  return 0;
 }

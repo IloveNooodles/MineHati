@@ -8,11 +8,11 @@ Game::Game() {
     this->recipe = new RecipesReader("config/recipe");
 }
 
-Game::Game(string filePath) {
+Game::Game(string configPath) {
   this->menu = new Menu();
   this->gameEnd = false;
-  this->items = new ItemsReader(filePath);
-  this->recipe = new RecipesReader(filePath);
+  this->items = new ItemsReader(configPath + "/item.txt");
+  this->recipe = new RecipesReader(configPath + "/recipe");
 }
 
 void Game::StartGame() {
