@@ -102,8 +102,11 @@ void Menu::MoveToCraft(
   int i = checkId(src, "INVENTORY");
   Item *s = getStorageElmtAtIdx(i);
   // if element is empty or move tool > 1
-  if (s->getName() == "-" || (s->isTool() && qty > 1)) {
+  if (s->getName() == "-") {
     throw new EmptySlotException(src);
+  }
+  if (s->isTool() && qty > 1) {
+    throw new InvalidNumberException(qty);
   }
   // loop the destination slot and check if slot is empty
   for (int k = 0; k < qty; k++) {
@@ -251,10 +254,6 @@ void Menu::MoveInventory(string src, string dest) {
   }
   if (s->getName() != d->getName()) {
     throw new DifferentItemException(s, d);
-  }
-
-  if (d->getQuantity() >= 64) {
-    throw new ItemStackOverflowException(d, 1);
   }
   // leftover empty slot
   int sisa = 64 - d->getQuantity();
