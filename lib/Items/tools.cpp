@@ -15,6 +15,8 @@ string Tools::print() const {
   return (this->getName() + " [" + to_string(this->getDurability()) + "/10]");
 }
 
+int Tools::getQuantity() const { return 1; }
+
 int Tools::getDurability() const { return this->durability; }
 
 void Tools::decreaseDurability(int durability) {

@@ -14,6 +14,7 @@ public:
   Tools(int, string, int);
   string print() const;
   int getDurability() const;
+  int getQuantity() const;
   void decreaseDurability(int);
   bool isTool();
 };
