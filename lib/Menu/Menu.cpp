@@ -80,10 +80,10 @@ int Menu::checkId(string Id, string arrayType) {
   } catch (...) {
     throw new InvalidSlotIDException(Id);
   }
-  if (arrayType == "INVENTORY" && header == "C") {
+  if (arrayType == "INVENTORY" && header != "I") {
     throw new InvalidSlotIDException(Id);
   }
-  if (arrayType == "CRAFT" && header == "I") {
+  if (arrayType == "CRAFT" && header != "C") {
     throw new InvalidSlotIDException(Id);
   }
 
