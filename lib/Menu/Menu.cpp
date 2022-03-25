@@ -443,7 +443,7 @@ void Menu::Craft(ItemsReader &items, RecipesReader &recipes) {
   bool recipeFound = true;
   /* Cek apakah tipe yang harus membenarkan atau tidak */
   bool fixedItem = false;
-  int itemCount = 0; /* Banyak tool */
+  int toolCount = 0; /* Banyak tool */
   int itemDura[] = {-1, -1};
   string itemName[] = {"-", "-"};
   for (int i = 0; i < 3; i++) {
@@ -451,18 +451,16 @@ void Menu::Craft(ItemsReader &items, RecipesReader &recipes) {
       string name = this->getElement(i, j).first->getName();
       if (name != "-") {
         if (items.getCtg(name) == "TOOL") {
-          if (itemCount < 2) {
-            itemDura[itemCount] = this->getElement(i, j).first->getDurability();
-            itemName[itemCount] = this->getElement(i, j).first->getName();
+          if (toolCount < 2) {
+            itemDura[toolCount] = this->getElement(i, j).first->getDurability();
+            itemName[toolCount] = this->getElement(i, j).first->getName();
           }
-          itemCount++;
-        } else {
-          itemCount += 999; /* Agar keluar dari loop */
+          toolCount++;
         }
       }
     }
   }
-  if (itemCount == 2) {
+  if (toolCount == 2) {
     if (itemName[0] == itemName[1]) {
       /* Boleh melakukan fix */
       fixedItem = true;
@@ -474,7 +472,7 @@ void Menu::Craft(ItemsReader &items, RecipesReader &recipes) {
         (itemDura[0] + itemDura[1] > 10 ? 10 : itemDura[0] + itemDura[1]);
     give(items, itemName[0], 1, dura);
     this->emptyCrafting();
-  } else if (!fixedItem && itemCount > 0) {
+  } else if (!fixedItem && toolCount > 0) {
     throw new NoRecipeFoundException();
   } else {
     while (recipeFound) {
