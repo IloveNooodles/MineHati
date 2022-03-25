@@ -474,8 +474,7 @@ void Menu::Craft(ItemsReader &items, RecipesReader &recipes) {
         (itemDura[0] + itemDura[1] > 10 ? 10 : itemDura[0] + itemDura[1]);
     give(items, itemName[0], 1, dura);
     this->emptyCrafting();
-  }
-  if (!fixedItem && itemCount > 0) {
+  } else if (!fixedItem && itemCount > 0) {
     throw new NoRecipeFoundException();
   } else {
     while (recipeFound) {
