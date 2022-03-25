@@ -446,13 +446,15 @@ void Menu::Craft(ItemsReader &items, RecipesReader &recipes) {
   int itemCount = 0; /* Banyak tool */
   int itemDura[] = {-1, -1};
   string itemName[] = {"-", "-"};
-  for (int i = 0; i < 3 && itemCount < 2; i++) {
-    for (int j = 0; j < 3 && itemCount < 2; j++) {
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
       string name = this->getElement(i, j).first->getName();
       if (name != "-") {
         if (items.getCtg(name) == "TOOL") {
-          itemDura[itemCount] = this->getElement(i, j).first->getDurability();
-          itemName[itemCount] = this->getElement(i, j).first->getName();
+          if (itemCount < 2) {
+            itemDura[itemCount] = this->getElement(i, j).first->getDurability();
+            itemName[itemCount] = this->getElement(i, j).first->getName();
+          }
           itemCount++;
         } else {
           itemCount += 999; /* Agar keluar dari loop */
@@ -472,6 +474,9 @@ void Menu::Craft(ItemsReader &items, RecipesReader &recipes) {
         (itemDura[0] + itemDura[1] > 10 ? 10 : itemDura[0] + itemDura[1]);
     give(items, itemName[0], 1, dura);
     this->emptyCrafting();
+  }
+  if (!fixedItem && itemCount > 0) {
+    throw new NoRecipeFoundException();
   } else {
     while (recipeFound) {
       recipeFound = false;
