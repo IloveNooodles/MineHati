@@ -181,7 +181,7 @@ void Menu::MoveFromCraft(string src, int n, string dest) {
                       new Tools(s->getId(), s->getName(), s->getCategory(),
                                 s->getDurability()),
                       getStorageSlotName(j));
-      setCraftingGridAtIdx(i, new Tools(), getCraftSlotName(i));
+      setCraftingGridAtIdx(i, new Item(), getCraftSlotName(i));
     }
 
   }
@@ -204,7 +204,11 @@ void Menu::MoveFromCraft(string src, int n, string dest) {
       setCraftingGridAtIdx(i, new Item(), getCraftSlotName(i));
     }
   } else {
-    new DifferentItemException(s, d);
+    if(d->isTool())
+    {
+      throw new SlotIsOccupiedException(dest);
+    }
+    throw new DifferentItemException(s, d);
   }
 }
 
