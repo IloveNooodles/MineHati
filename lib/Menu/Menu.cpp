@@ -278,6 +278,10 @@ void Menu::give(ItemsReader &items, string name, int qty, int dura) {
 // add item to inv
 void Menu::give(ItemsReader &items, string name, int qty) {
   int qtyAwal = qty;
+  if (qty <= 0) {
+    throw new InvalidNumberException(qty);
+  }
+
   if (items.getCtg(name) == "TOOL") {
     give(items, name, qty, 10);
   } else if (items.getCtg(name) == "NONTOOL") {
@@ -359,6 +363,11 @@ void Menu::Discard(string Id, int quantity) {
 void Menu::Use(string Id) {
   int i = checkId(Id, "INVENTORY");
   Item *s = getStorageElmtAtIdx(i);
+  // If the slot is empty throw new exception
+  if (s->getName() == "-") {
+    throw new EmptySlotException(Id);
+  }
+
   if (!s->isTool()) {
     throw new WrongItemTypeException(s);
   }

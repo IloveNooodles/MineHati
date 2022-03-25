@@ -82,15 +82,24 @@ void Game::process(string command) {
       string slot;
       int qty;
       cin >> slot >> qty;
+      if (cin.fail()) {
+        throw new InvalidCommandArgsException(command);
+      }
       this->menu->Discard(slot, qty);
     } else if (command == "USE") {
       string slot;
       cin >> slot;
+      if (cin.fail()) {
+        throw new InvalidCommandArgsException(command);
+      }
       this->menu->Use(slot);
     } else if (command == "GIVE") {
       string name;
       int qty;
       cin >> name >> qty;
+      if (cin.fail()) {
+        throw new InvalidCommandArgsException(command);
+      }
       this->menu->give(*this->items, name, qty);
     } else if (command == "MOVE") {
       string slot;

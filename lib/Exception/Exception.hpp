@@ -35,7 +35,9 @@ private:
 
 public:
   InvalidNumberException(int number) { this->number = number; }
-  void what() { cout << this->number << " is an invalid number " << endl; }
+  void what() {
+    cout << this->number << " is an invalid number for this action" << endl;
+  }
 };
 
 // IO
