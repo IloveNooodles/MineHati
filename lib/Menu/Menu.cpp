@@ -230,6 +230,13 @@ void Menu::MoveInventory(string src, string dest) {
       if (!s->isTool()) {
         throw new EmptySlotException(src);
       }
+      if (d->getName() == "-") {
+        setStorageAtIdx(j, s, getStorageSlotName(j));
+        setStorageAtIdx(i, new Item(), getStorageSlotName(i));
+        cout << "Moved item from " << src << " to inventory " << dest
+             << " slot\n\n";
+        return;
+      }
       throw new WrongItemTypeException(s);
     } else {
       if (!d->isTool()) {
