@@ -73,8 +73,14 @@ void Menu::setCraftingGridAtIdx(int index, Item *i, string name) {
 // check if the slot is available or not
 int Menu::checkId(string Id, string arrayType) {
   int i = 0;
-  i = stoi(Id.substr(1));
-  string header = Id.substr(0, 1);
+  string header = "";
+  try {
+    i = stoi(Id.substr(1));
+    header = Id.substr(0, 1);
+  }
+  catch (...) {
+    throw new InvalidSlotIDException(Id);
+  }
   if (arrayType == "INVENTORY" && header == "C") {
     throw new InvalidSlotIDException(Id);
   }
@@ -114,6 +120,9 @@ void Menu::MoveToCraft(
         }
         crft->addQuantity(1);
       }
+      else if (crft->getName() != "-") {
+        throw new SlotIsOccupiedException(dest[k]);
+      }
       // if the same is empty set the slot to current item
       else {
         setCraftingGridAtIdx(
@@ -128,7 +137,7 @@ void Menu::MoveToCraft(
     }
     // the item is tool then we cannot overwrite the item in the craft
     else {
-      if (getCraftElmtAtIdx(j)->getName() != "-") {
+      if (s->getName() != "-") {
         throw new SlotIsOccupiedException(dest[k]);
       }
       // set the craft and reomve from storage
@@ -139,6 +148,7 @@ void Menu::MoveToCraft(
       setStorageAtIdx(i, new Item(), getStorageSlotName(i));
     }
   }
+  cout << "Item from inventory slot " << src << " moved to crafting slot" << "\n\n";
 }
 
 // move from crafting grid ke inventory
@@ -188,7 +198,7 @@ void Menu::MoveFromCraft(string src, int n, string dest) {
   // move the same item nontools
   else if (s->getId() == d->getId() && s->isNontool()) {
     // if trying to move more items than available
-    if(d->getQuantity() < n)
+    if(s->getQuantity() < n)
     {
       throw new NotEnoughItemException(s, n);
     }
@@ -210,6 +220,7 @@ void Menu::MoveFromCraft(string src, int n, string dest) {
     }
     throw new DifferentItemException(s, d);
   }
+  cout << "Item from crafting slot " << src << " moved to inventory slot " << dest << " with the amount of " << n << "\n\n";
 }
 
 // move from inv to inv
@@ -221,8 +232,14 @@ void Menu::MoveInventory(string src, string dest) {
   // move tools to tools
   if (!s->isNontool() || !d->isNontool()) {
     if (!s->isNontool()) {
+      if (!s->isTool()) {
+        throw new EmptySlotException(src);
+      }
       throw new WrongItemTypeException(s);
     } else {
+      if(!d->isTool()) {
+        throw new EmptySlotException(dest);
+      }
       throw new WrongItemTypeException(d);
     }
   }
@@ -235,6 +252,7 @@ void Menu::MoveInventory(string src, string dest) {
     d->addQuantity(sisa);
     s->addQuantity(-1 * sisa);
   }
+  cout << "Move item from " << src << " to inventory " << dest << " slot\n\n";
 }
 
 // add spesific tool to inv
@@ -302,6 +320,7 @@ void Menu::give(ItemsReader &items, string name, int qty) {
       throw new InventoryFullException();
     }
   }
+  cout << "Successfully adding " << name << " with the amount of " << qty << " to inventory\n\n";
 }
 
 // throw away item
@@ -326,6 +345,7 @@ void Menu::Discard(string Id, int quantity) {
   if (s->getQuantity() == 0) {
     setStorageAtIdx(i, new Item(), getStorageSlotName(i));
   }
+  cout << "Successfully throw item from " << Id << " with the amount of " << quantity << "\n\n";
 }
 
 // use tools
@@ -339,6 +359,7 @@ void Menu::Use(string Id) {
   if (s->getDurability() <= 0) {
     setStorageAtIdx(i, new Item(), getStorageSlotName(i));
   }
+  cout << "Successfully use item in " << Id << "\n\n";
 }
 
 // show crafting grid and inv
@@ -387,6 +408,7 @@ void Menu::exportInventory(ItemsReader &items, string loc) {
     }
   }
   file.close();
+  cout << "Inventory successfully exported to " << loc << "\n\n";
 }
 
 void Menu::Craft(ItemsReader &items, RecipesReader &recipes) {
@@ -479,6 +501,7 @@ void Menu::Craft(ItemsReader &items, RecipesReader &recipes) {
   if (!recipeFound && !fixedItem) {
     CraftMirror(items, recipes, recipeCount);
   }
+  cout << "Check your inventory to see crafted items\n\n";
 }
 
 void Menu::CraftMirror(ItemsReader &items, RecipesReader &recipes, int recipeCount) {
