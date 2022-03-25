@@ -4,8 +4,7 @@
 #include <string>
 using namespace std;
 
-class Item
-{
+class Item {
 protected:
   int id;
   string name;
@@ -16,11 +15,8 @@ public:
   Item(int, string, string);
   Item(int, string);
   int getId() const;
-  void setId(int id);
   string getName() const;
-  void setName(string name);
   string getCategory() const;
-  void setCategory(string category);
   virtual string print() const { return "EMPTY"; }
   virtual int getQuantity() const { return -999; }
   virtual void addQuantity(int) {}

@@ -14,20 +14,9 @@ Nontools::Nontools(int id, string name, int quantity) : Item(id, name) {
 string Nontools::print() const {
   return (this->getName() + " " + to_string(this->getQuantity()));
 }
-Nontools::Nontools(const Nontools &anotherTools) {
-  this->id = anotherTools.id;
-  this->name = anotherTools.name;
-  this->category = anotherTools.category;
-  this->quantity = anotherTools.quantity;
-}
 
 int Nontools::getQuantity() const { return this->quantity; }
 
-void Nontools::addQuantity(int quantity) {
-  if (this->quantity + quantity > 64) {
-    throw new ItemStackOverflowException(this, quantity);
-  }
-  this->quantity += quantity;
-}
+void Nontools::addQuantity(int quantity) { this->quantity += quantity; }
 
 bool Nontools::isNontool() { return true; }

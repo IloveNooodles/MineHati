@@ -113,7 +113,10 @@ void Game::process(string command) {
         throw new InvalidCommandArgsException(command);
       }
       if (slot[0] == 'I') {
-        Item *item = this->menu->getStorageElmtAtIdx(slot[1] - '0');
+        Item *item = this->menu->getStorageElmtAtIdx(stoi(slot.substr(1)));
+        if (item->getName() == "-") {
+          throw new EmptySlotException(slot);
+        }
         if (item->getQuantity() < N) {
           throw new NotEnoughItemException(item, N);
         }
