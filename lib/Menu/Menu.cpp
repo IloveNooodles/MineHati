@@ -331,6 +331,11 @@ void Menu::Discard(string Id, int quantity) {
     throw new InvalidNumberException(quantity);
   }
   Item *s = getStorageElmtAtIdx(i);
+
+  // If the slot is empty throw new exception
+  if (s->getName() == "-") {
+    throw new EmptySlotException(Id);
+  }
   // if the slot item is tool then the qty is only 1
   if (s->isTool()) {
     if (quantity > 1) {
