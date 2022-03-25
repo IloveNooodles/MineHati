@@ -454,6 +454,7 @@ void Menu::Craft(ItemsReader &items, RecipesReader &recipes) {
   /* Cek apakah tipe yang harus membenarkan atau tidak */
   bool fixedItem = false;
   int toolCount = 0; /* Banyak tool */
+  int nontoolCount = 0;
   int itemDura[] = {-1, -1};
   string itemName[] = {"-", "-"};
   for (int i = 0; i < 3; i++) {
@@ -466,11 +467,13 @@ void Menu::Craft(ItemsReader &items, RecipesReader &recipes) {
             itemName[toolCount] = this->getElement(i, j).first->getName();
           }
           toolCount++;
+        } else {
+          nontoolCount ++;
         }
       }
     }
   }
-  if (toolCount == 2) {
+  if (toolCount == 2 && nontoolCount == 0) {
     if (itemName[0] == itemName[1]) {
       /* Boleh melakukan fix */
       fixedItem = true;
