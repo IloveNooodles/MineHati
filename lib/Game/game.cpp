@@ -117,6 +117,9 @@ void Game::process(string command) {
         for (int i = 0; i < N; i++) {
           string desSlot;
           cin >> desSlot;
+          if (desSlot[0] == 'I' && N != 1) {
+            throw new InvalidNumberException(N);
+          }
           dest.push_back(desSlot);
         }
         if (dest[0][0] == 'I') {
