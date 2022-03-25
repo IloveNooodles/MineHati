@@ -6,6 +6,7 @@ Game::Game() {
   this->gameEnd = false;
   this->items = new ItemsReader("../../config/item.txt");
   this->recipe = new RecipesReader("../../config/recipe");
+  cout << "Loaded with default config\n"; 
 }
 
 Game::Game(string configPath) {
@@ -13,6 +14,7 @@ Game::Game(string configPath) {
   this->gameEnd = false;
   this->items = new ItemsReader(configPath + "/item.txt");
   this->recipe = new RecipesReader(configPath + "/recipe");
+  cout << "loaded with config located in " << configPath << "\n";
 }
 
 void Game::StartGame() {
@@ -115,5 +117,7 @@ void Game::process(string command) {
     cout << "RECIPES: See all available recipe\n";
     cout << "HELP: To see list of commands\n";
     cout << "QUIT: To exit the game\n\n";
+  } else {
+    throw new InvalidCommandException(command);
   }
 }

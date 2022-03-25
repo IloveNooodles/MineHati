@@ -13,36 +13,6 @@ public:
   virtual void what() = 0;
 };
 
-// IO Failed Exception Class
-class IOException : public BaseException {
-private:
-  BaseException *exc;
-
-public:
-  void what() {
-    cout << "IO Failed!" << endl;
-    exc->what();
-  }
-};
-
-// Command runtime exception
-class CommandException : public BaseException {
-private:
-  BaseException *exc;
-  string command;
-
-public:
-  CommandException(BaseException *exc, string command) {
-    this->exc = exc;
-    this->command = command;
-  }
-
-  void what() {
-    cout << "Command " << command << " Failed!" << endl;
-    exc->what();
-  }
-};
-
 // General
 class InvalidNumberException : public BaseException {
 private:
@@ -61,22 +31,6 @@ private:
 public:
   InvalidCommandException(string command) { this->command = command; }
   void what() { cout << this->command << " is an invalid command " << endl; }
-};
-
-class InvalidCommandArgsException : public BaseException {
-private:
-  string command;
-  string args;
-
-public:
-  InvalidCommandArgsException(string command, string args) {
-    this->command = command;
-    this->args = args;
-  }
-  void what() {
-    cout << this->args << " is an invalid args for command " << this->command
-         << endl;
-  }
 };
 
 class FileNotFoundException : public BaseException {
