@@ -135,7 +135,7 @@ void Menu::MoveToCraft(
     }
     // the item is tool then we cannot overwrite the item in the craft
     else {
-      if (s->getName() != "-") {
+      if (crft->getName() != "-") {
         throw new SlotIsOccupiedException(dest[k]);
       }
       // set the craft and reomve from storage
@@ -241,6 +241,9 @@ void Menu::MoveInventory(string src, string dest) {
       }
       throw new WrongItemTypeException(d);
     }
+  }
+  if (s->getName() != d->getName()) {
+    throw DifferentItemException(s,d);
   }
   // leftover empty slot
   int sisa = 64 - d->getQuantity();
