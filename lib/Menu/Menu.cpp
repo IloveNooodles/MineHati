@@ -238,7 +238,10 @@ void Menu::MoveInventory(string src, string dest) {
       throw new WrongItemTypeException(s);
     } else {
       if(!d->isTool()) {
-        throw new EmptySlotException(dest);
+        setStorageAtIdx(j, s, getStorageSlotName(j));
+        setStorageAtIdx(i, new Item(), getStorageSlotName(i));
+        cout << "Moved item from " << src << " to inventory " << dest << " slot\n\n";
+        return;
       }
       throw new WrongItemTypeException(d);
     }
