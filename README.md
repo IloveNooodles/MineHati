@@ -16,6 +16,9 @@ MineHati is a minecraft-like CLI game made using C++ that applies Object Oriente
 MineHati focused on Mobita who bored because of the pandemic. To amuse Mobita, Doraemongais made a minecraft-like game for Mobita to get rid of the boredom. MineHati provide an Inventory to SHOW all of the items that Moibta currenly has, Crafting Table to make an item with spesific recipe, and Items that categorized as Tool or Nontool that varies from WOOD to a DIAMOND SWORD.
 
 ## Screenshot
+<img width="1017" alt="image" src="https://user-images.githubusercontent.com/63847012/160052054-4252c341-9bc9-4d01-aee4-7e104549e40a.png">
+<img width="969" alt="image" src="https://user-images.githubusercontent.com/63847012/160052279-1dbd060c-399b-45ff-b0db-26eb3b31c470.png">
+
 
 ## Program Requirements
 1. [GCC 7 or higher (that support c++17)](https://gcc.gnu.org/install/binaries.html)
@@ -37,9 +40,9 @@ Alternatively
 After run the program there are several commands that you could do. Type HELP to print all of the available commands
 1. SHOW: Show inventory and craft
 1. DISCARD <INVENTORY_SLOT_ID> <QUANTITY>: Throw item in inventory with some quantity
-1. USE <slot>: Use tool in inventory\n";
-1. GIVE <ITEM_NAME> <QUANTITY>: Give spesific item to with some quantity\n";
-1. MOVE <INVENTORY_SLOT_ID> N <CRAFT_SLOT_ID> / <INVENTORY_SLOT_ID> ...: Move item in craft and inventory
+1. USE <slot>: Use tool in inventory
+1. GIVE <ITEM_NAME> <QUANTITY>: Give spesific item to with some quantity
+1. MOVE <INVENTORY_SLOT_ID> N <CRAFT_SLOT_ID> / <INVENTORY_SLOT_ID> ... : Move item in craft and inventory
 1. CRAFT: Use craft to make new item that available in the recipe
 1. EXPORT <FILENAME>: Export inventory and craft into a file
 1. RECIPES: See all available recipe
