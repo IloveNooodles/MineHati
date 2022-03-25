@@ -13,6 +13,21 @@ public:
   virtual void what() = 0;
 };
 
+class CommandFailedException : public BaseException {
+private:
+  BaseException *exc;
+  string command;
+
+public:
+  CommandFailedException(BaseException *exc, string command) {
+    this->exc = exc;
+    this->command = command;
+  }
+  void what() {
+    cout << "Command " << this->command << " failed" << endl;
+    this->exc->what();
+  }
+};
 // General
 class InvalidNumberException : public BaseException {
 private:

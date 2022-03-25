@@ -34,9 +34,27 @@ public:
     }
     inFile.close();
   }
-  int getID(string name) { return this->idMap[name]; }
-  string getType(string name) { return this->typeMap[name]; }
-  string getCtg(string name) { return this->ctgMap[name]; }
+  int getID(string name) {
+    auto search = this->idMap.find(name);
+    if (search == this->idMap.end()) {
+      throw new ItemNotFoundException(name);
+    }
+    return this->idMap[name];
+  }
+  string getType(string name) {
+    auto search = this->typeMap.find(name);
+    if (search == this->typeMap.end()) {
+      throw new ItemNotFoundException(name);
+    }
+    return this->typeMap[name];
+  }
+  string getCtg(string name) {
+    auto search = this->ctgMap.find(name);
+    if (search == this->ctgMap.end()) {
+      throw new ItemNotFoundException(name);
+    }
+    return this->ctgMap[name];
+  }
 };
 
 #endif
