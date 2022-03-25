@@ -113,6 +113,10 @@ void Game::process(string command) {
         throw new InvalidCommandArgsException(command);
       }
       if (slot[0] == 'I') {
+        Item *item = this->menu->getStorageElmtAtIdx(slot[1] - '0');
+        if (item->getQuantity() < N) {
+          throw new NotEnoughItemException(item, N);
+        }
         vector<string> dest;
         for (int i = 0; i < N; i++) {
           string desSlot;
