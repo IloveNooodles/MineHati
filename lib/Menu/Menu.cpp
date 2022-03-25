@@ -252,7 +252,7 @@ void Menu::MoveInventory(string src, string dest) {
     d->addQuantity(sisa);
     s->addQuantity(-1 * sisa);
   }
-  cout << "Move item from " << src << " to inventory " << dest << " slot\n\n";
+  cout << "Moved item from " << src << " to inventory " << dest << " slot\n\n";
 }
 
 // add spesific tool to inv
@@ -320,7 +320,7 @@ void Menu::give(ItemsReader &items, string name, int qty) {
       throw new InventoryFullException();
     }
   }
-  cout << "Successfully adding " << name << " with the amount of " << qty << " to inventory\n\n";
+  cout << "Successfully added " << name << " with the amount of " << qty << " to inventory\n\n";
 }
 
 // throw away item
@@ -345,7 +345,7 @@ void Menu::Discard(string Id, int quantity) {
   if (s->getQuantity() == 0) {
     setStorageAtIdx(i, new Item(), getStorageSlotName(i));
   }
-  cout << "Successfully throw item from " << Id << " with the amount of " << quantity << "\n\n";
+  cout << "Successfully threw item from " << Id << " with the amount of " << quantity << "\n\n";
 }
 
 // use tools
@@ -359,7 +359,7 @@ void Menu::Use(string Id) {
   if (s->getDurability() <= 0) {
     setStorageAtIdx(i, new Item(), getStorageSlotName(i));
   }
-  cout << "Successfully use item in " << Id << "\n\n";
+  cout << "Successfully used item in " << Id << "\n\n";
 }
 
 // show crafting grid and inv

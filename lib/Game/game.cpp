@@ -14,7 +14,7 @@ Game::Game(string configPath) {
   this->gameEnd = false;
   this->items = new ItemsReader(configPath + "/item.txt");
   this->recipe = new RecipesReader(configPath + "/recipe");
-  cout << "loaded with config located in " << configPath << "\n";
+  cout << "Loaded with config located in " << configPath << "\n";
 }
 
 void Game::StartGame() {
