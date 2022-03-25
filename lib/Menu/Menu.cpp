@@ -281,6 +281,7 @@ void Menu::give(ItemsReader &items, string name, int qty, int dura) {
 
 // add item to inv
 void Menu::give(ItemsReader &items, string name, int qty) {
+  int qtyAwal = qty;
   if (items.getCtg(name) == "TOOL") {
     give(items, name, qty, 10);
   } else if (items.getCtg(name) == "NONTOOL") {
@@ -323,7 +324,7 @@ void Menu::give(ItemsReader &items, string name, int qty) {
       throw new InventoryFullException();
     }
   }
-  cout << "Successfully added " << name << " with the amount of " << qty << " to inventory\n\n";
+  cout << "Successfully added " << name << " with the amount of " << qtyAwal << " to inventory\n\n";
 }
 
 // throw away item
