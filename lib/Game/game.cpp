@@ -121,6 +121,9 @@ void Game::process(string command) {
         }
         if (dest[0][0] == 'I') {
           /* Pindah dari inventory ke inventory */
+          if (N > 1) {
+            throw new InvalidNumberException(N);
+          }
           this->menu->MoveInventory(slot, dest[0]);
         } else if (dest[0][0] == 'C') {
           this->menu->MoveToCraft(slot, N, dest);

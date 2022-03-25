@@ -252,6 +252,10 @@ void Menu::MoveInventory(string src, string dest) {
   if (s->getName() != d->getName()) {
     throw new DifferentItemException(s, d);
   }
+
+  if (d->getQuantity() >= 64) {
+    throw new ItemStackOverflowException(d, 1);
+  }
   // leftover empty slot
   int sisa = 64 - d->getQuantity();
   if (s->getQuantity() <= sisa) {
