@@ -51,5 +51,3 @@ After running the program, there are several commands that players can use. Type
 ## Room for improvement
 1. Make a GUI for the program for ease of use
 2. Add more items and recipe to amplify the Minecraft crafting experience
-
-### copyright
