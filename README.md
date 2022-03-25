@@ -43,7 +43,7 @@ Alternatively 4. You can compile manually using `make compile` 5. After compilin
 
 ## How to show code coverage
 
-1. In the program directory run `make coverage_test` to run the program
+1. In the program directory run `make coverage_run` to run the program
 2. To look at the coverage result, open `index.html` inside html on coverage directory
 
 ## Usage
