@@ -53,6 +53,9 @@ string Game::askCommand() {
     string command;
     cout << "Masukkan command: ";
     cin >> command;
+    if(cin.eof()){
+      return "QUIT";
+    }
     for (string com : available) {
       if (com == command) {
         return command;
