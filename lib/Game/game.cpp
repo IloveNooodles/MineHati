@@ -105,6 +105,10 @@ void Game::process(string command) {
       string slot;
       int N;
       cin >> slot >> N;
+      if(N <= 0)
+      {
+        throw new InvalidNumberException(N);
+      }
       if (cin.fail()) {
         throw new InvalidCommandArgsException(command);
       }
