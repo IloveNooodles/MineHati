@@ -71,15 +71,18 @@ void Game::process(string command) {
     int qty;
     cin >> slot >> qty;
     this->menu->Discard(slot, qty);
+    cout << "Successfully throw item from " << slot << " with the amount of " << qty << "\n\n";
   } else if (command == "USE") {
     string slot;
     cin >> slot;
     this->menu->Use(slot);
+    cout << "Successfully use item in " << slot << "\n\n";
   } else if (command == "GIVE") {
     string name;
     int qty;
     cin >> name >> qty;
     this->menu->give(*this->items, name, qty);
+    cout << "Successfully adding " << name << " with the amount of " << qty << " to inventory\n\n";
   } else if (command == "MOVE") {
     string slot;
     int N;
@@ -92,10 +95,13 @@ void Game::process(string command) {
         dest.push_back(desSlot);
       }
       if (dest[0][0] == 'I') {
-        this->menu->MoveInventory(slot, dest[0]);
-      } else if (dest[0][0] == 'C') {
         /* Pindah dari inventory ke inventory */
+        this->menu->MoveInventory(slot, dest[0]);
+        cout << "Move item from " << slot << " to inventory " << dest[0]
+             << " slot\n\n";
+      } else if (dest[0][0] == 'C') {
         this->menu->MoveToCraft(slot, N, dest);
+        cout << "Item from inventory slot " << slot << " moved to crafting slot" << "\n\n";
       } else {
         throw new InvalidSlotIDException(dest[0]);
       }
@@ -104,15 +110,18 @@ void Game::process(string command) {
       string dest;
       cin >> dest;
       this->menu->MoveFromCraft(slot, N, dest);
+      cout << "Item from crafting slot " << slot << " moved to inventory slot " << dest << " with the amount of " << N << "\n\n";
     }
   } else if (command == "CRAFT") {
     this->menu->Craft(*items, *recipe);
+    cout << "Check your inventory to see crafted items\n\n";
   } else if (command == "RECIPES") {
     this->menu->showRecipes(*this->recipe);
   } else if (command == "EXPORT") {
     string loc;
     cin >> loc;
     this->menu->exportInventory(*items, "./" + loc);
+    cout << "Inventory successfully exported to " << loc << "\n\n";
   } else if (command == "QUIT") {
     this->gameEnd = true;
     cout << "Thank you for playing MineHati!\n";
@@ -120,8 +129,8 @@ void Game::process(string command) {
     cout << "\nAvailable commands:\n";
     cout << "SHOW: Show inventory and craft\n";
     cout << "DISCARD <INVENTORY_SLOT_ID> <QUANTITY>: Throw item in inventory with some quantity\n";
-    cout << "USE <slot>: Use tool in inventory\n";
-    cout << "GIVE <ITEM_NAME> <QUANTITY>: Give spesific item to with some quantity\n";
+    cout << "USE <SLOT>: Use tool in inventory\n";
+    cout << "GIVE <ITEM_NAME> <QUANTITY>: Give specific item to with some quantity\n";
     cout << "MOVE <INVENTORY_SLOT_ID> N <CRAFT_SLOT_ID> / <INVENTORY_SLOT_ID> ...: Move item in craft and inventory\n";
     cout << "CRAFT: Use craft to make new item that available in the recipe\n";
     cout << "EXPORT <FILENAME>: Export inventory and craft into a file\n";
