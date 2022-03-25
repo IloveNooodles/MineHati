@@ -15,7 +15,7 @@ MineHati is a minecraft-like CLI game made using C++ that applies Object Oriente
 ## General Infornation & Features
 As a continuation of previous projects, MineHati focuses on Mobita's story who is now bored because of the pandemic. To amuse Mobita, Doraemongais made a Minecraft-like game for Mobita to get rid of the boredom. To put it simply, MineHati mimics Minecraft's crafting aspects. There is an inventory where players can fill it by using the command 'GIVE'. Items stored in the inventory can be then moved into the crafting table by using the command 'MOVE'. If the configuration of items inside the crafting table are correct, the player can call the command 'CRAFT' to craft a new item, consuming the items that were put in the crafting table.
 
-## Screenshot
+## Demo
 ![cmd_4YaTTQMr90](https://user-images.githubusercontent.com/29671825/160104720-63862162-5681-4928-bb31-88ff1905e27e.gif)
 
 
