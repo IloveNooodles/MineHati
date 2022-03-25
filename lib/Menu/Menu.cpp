@@ -102,6 +102,10 @@ void Menu::MoveToCraft(
   int i = checkId(src, "INVENTORY");
   Item *s = getStorageElmtAtIdx(i);
   // if element is empty or move tool > 1
+  if(s->getQuantity() < qty) {
+    throw new NotEnoughItemException(s, qty);
+  }
+
   if (s->getName() == "-") {
     throw new EmptySlotException(src);
   }
