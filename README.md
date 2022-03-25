@@ -13,12 +13,11 @@ MineHati is a minecraft-like CLI game made using C++ that applies Object Oriente
 | Marchotridyo                   | 13520119 |
 
 ## General Infornation & Features
-MineHati focused on Mobita who bored because of the pandemic. To amuse Mobita, Doraemongais made a minecraft-like game for Mobita to get rid of the boredom. MineHati provide an Inventory to SHOW all of the items that Moibta currenly has, Crafting Table to make an item with spesific recipe, and Items that categorized as Tool or Nontool that varies from WOOD to a DIAMOND SWORD.
+As a continuation of previous projects, MineHati focuses on Mobita's story who is now bored because of the pandemic. To amuse Mobita, Doraemongais made a Minecraft-like game for Mobita to get rid of the boredom. To put it simply, MineHati mimics Minecraft's crafting aspects. There is an inventory where players can fill it by using the command 'GIVE'. Items stored in the inventory can be then moved into the crafting table by using the command 'MOVE'. If the configuration of items inside the crafting table are correct, the player can call the command 'CRAFT' to craft a new item, consuming the items that were put in the crafting table.
 
 ## Screenshot
 <img width="1017" alt="image" src="https://user-images.githubusercontent.com/63847012/160052054-4252c341-9bc9-4d01-aee4-7e104549e40a.png">
 <img width="969" alt="image" src="https://user-images.githubusercontent.com/63847012/160052279-1dbd060c-399b-45ff-b0db-26eb3b31c470.png">
-
 
 ## Program Requirements
 1. [GCC 7 or higher (that support c++17)](https://gcc.gnu.org/install/binaries.html)
@@ -28,8 +27,8 @@ To run this program in any operating system, you must have gcc that support c++1
 
 ## How to build
 1. Clone the directory using `git clone https://github.com/IloveNooodles/MineHati.git`
-1. Move to the directory using `cd` command
-1. In the program directory run `make compile run` to run the program 
+2. Move to the directory using `cd` command
+3. In the program directory run `make compile run` to run the program 
 
 Alternatively
 4. You can compile manually using `make compile`
@@ -37,20 +36,20 @@ Alternatively
 6. run `./main` to run the program
 
 ## Usage
-After run the program there are several commands that you could do. Type HELP to print all of the available commands
+After running the program, there are several commands that players can use. Type HELP to print all of the available commands, which are:
 1. SHOW: Show inventory and craft
-1. DISCARD <INVENTORY_SLOT_ID> <QUANTITY>: Throw item in inventory with some quantity
-1. USE <slot>: Use tool in inventory
-1. GIVE <ITEM_NAME> <QUANTITY>: Give spesific item to with some quantity
-1. MOVE <INVENTORY_SLOT_ID> N <CRAFT_SLOT_ID> / <INVENTORY_SLOT_ID> ... : Move item in craft and inventory
-1. CRAFT: Use craft to make new item that available in the recipe
-1. EXPORT <FILENAME>: Export inventory and craft into a file
-1. RECIPES: See all available recipe
-1. HELP: To see list of commands
-1. QUIT: To exit the game
+2. DISCARD <INVENTORY_SLOT_ID> <QUANTITY>: Discard item(s) in inventory. Quantity refers to how much of the item from that slot will be discarded
+3. USE <slot>: Use a tool in inventory, therefore reducing it's durability
+4. GIVE <ITEM_NAME> <QUANTITY>: Add specific item(s) to the inventory with some quantity
+5. MOVE <INVENTORY_SLOT_ID> / <CRAFT_SLOT_ID> N <CRAFT_SLOT_ID> / <INVENTORY_SLOT_ID> ... : Move item(s) in craft and inventory
+6. CRAFT: Consume items inside the crafting table to make a new item if the configuration is recognized by a recipe
+7. EXPORT <FILENAME>: Export inventory and craft into a file
+8. RECIPES: See all available recipe
+9. HELP: To see list of commands
+10. QUIT: To exit the game
 
 ## Room for improvement
 1. Make a GUI for the program for ease of use
-1. Add more items and recipe to get more minecraft experience
+2. Add more items and recipe to amplify the Minecraft crafting experience
 
 ### copyright
