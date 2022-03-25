@@ -250,7 +250,7 @@ void Menu::MoveInventory(string src, string dest) {
     }
   }
   if (s->getName() != d->getName()) {
-    throw DifferentItemException(s,d);
+    throw new DifferentItemException(s, d);
   }
   // leftover empty slot
   int sisa = 64 - d->getQuantity();
