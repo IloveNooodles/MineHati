@@ -522,7 +522,7 @@ void Menu::Craft(ItemsReader &items, RecipesReader &recipes) {
         if (recipeFound) {
           ++recipeCount;
           this->decreaseCraftingByOne();
-          give(items, r[x].getName(), r[x].getAmount());
+          give(items, r[x].getName(), 1);
         }
       }
     }
