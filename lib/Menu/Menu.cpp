@@ -77,8 +77,7 @@ int Menu::checkId(string Id, string arrayType) {
   try {
     i = stoi(Id.substr(1));
     header = Id.substr(0, 1);
-  }
-  catch (...) {
+  } catch (...) {
     throw new InvalidSlotIDException(Id);
   }
   if (arrayType == "INVENTORY" && header == "C") {
@@ -119,8 +118,7 @@ void Menu::MoveToCraft(
           throw new ItemStackOverflowException(crft, 1);
         }
         crft->addQuantity(1);
-      }
-      else if (crft->getName() != "-") {
+      } else if (crft->getName() != "-") {
         throw new SlotIsOccupiedException(dest[k]);
       }
       // if the same is empty set the slot to current item
@@ -148,7 +146,8 @@ void Menu::MoveToCraft(
       setStorageAtIdx(i, new Item(), getStorageSlotName(i));
     }
   }
-  cout << "Item from inventory slot " << src << " moved to crafting slot" << "\n\n";
+  cout << "Item from inventory slot " << src << " moved to crafting slot"
+       << "\n\n";
 }
 
 // move from crafting grid ke inventory
@@ -167,8 +166,7 @@ void Menu::MoveFromCraft(string src, int n, string dest) {
     // move nontool to dest
     if (s->isNontool()) {
       // if trying to move more items than available
-      if(s->getQuantity() < n)
-      {
+      if (s->getQuantity() < n) {
         throw new NotEnoughItemException(s, n);
       }
       setStorageAtIdx(
@@ -183,8 +181,7 @@ void Menu::MoveFromCraft(string src, int n, string dest) {
     // source is tools
     else {
       // if trying to move more items than available
-      if(n>1)
-      {
+      if (n > 1) {
         throw new NotEnoughItemException(s, n);
       }
       setStorageAtIdx(j,
@@ -198,13 +195,11 @@ void Menu::MoveFromCraft(string src, int n, string dest) {
   // move the same item nontools
   else if (s->getId() == d->getId() && s->isNontool()) {
     // if trying to move more items than available
-    if(s->getQuantity() < n)
-    {
+    if (s->getQuantity() < n) {
       throw new NotEnoughItemException(s, n);
     }
     // if after move, slot is overloaded
-    if(n+d->getQuantity()>64)
-    {
+    if (n + d->getQuantity() > 64) {
       throw new ItemStackOverflowException(d, n);
     }
     s->addQuantity(-n);
@@ -214,13 +209,13 @@ void Menu::MoveFromCraft(string src, int n, string dest) {
       setCraftingGridAtIdx(i, new Item(), getCraftSlotName(i));
     }
   } else {
-    if(d->isTool())
-    {
+    if (d->isTool()) {
       throw new SlotIsOccupiedException(dest);
     }
     throw new DifferentItemException(s, d);
   }
-  cout << "Item from crafting slot " << src << " moved to inventory slot " << dest << " with the amount of " << n << "\n\n";
+  cout << "Item from crafting slot " << src << " moved to inventory slot "
+       << dest << " with the amount of " << n << "\n\n";
 }
 
 // move from inv to inv
@@ -237,10 +232,11 @@ void Menu::MoveInventory(string src, string dest) {
       }
       throw new WrongItemTypeException(s);
     } else {
-      if(!d->isTool()) {
+      if (!d->isTool()) {
         setStorageAtIdx(j, s, getStorageSlotName(j));
         setStorageAtIdx(i, new Item(), getStorageSlotName(i));
-        cout << "Moved item from " << src << " to inventory " << dest << " slot\n\n";
+        cout << "Moved item from " << src << " to inventory " << dest
+             << " slot\n\n";
         return;
       }
       throw new WrongItemTypeException(d);
@@ -324,15 +320,16 @@ void Menu::give(ItemsReader &items, string name, int qty) {
       throw new InventoryFullException();
     }
   }
-  cout << "Successfully added " << name << " with the amount of " << qtyAwal << " to inventory\n\n";
+  cout << "Successfully added " << name << " with the amount of " << qtyAwal
+       << " to inventory\n\n";
 }
 
 // throw away item
 void Menu::Discard(string Id, int quantity) {
+  int i = checkId(Id, "INVENTORY");
   if (quantity <= 0) {
     throw new InvalidNumberException(quantity);
   }
-  int i = checkId(Id, "INVENTORY");
   Item *s = getStorageElmtAtIdx(i);
   // if the slot item is tool then the qty is only 1
   if (s->isTool()) {
@@ -349,7 +346,8 @@ void Menu::Discard(string Id, int quantity) {
   if (s->getQuantity() == 0) {
     setStorageAtIdx(i, new Item(), getStorageSlotName(i));
   }
-  cout << "Successfully threw item from " << Id << " with the amount of " << quantity << "\n\n";
+  cout << "Successfully threw item from " << Id << " with the amount of "
+       << quantity << "\n\n";
 }
 
 // use tools
@@ -458,7 +456,8 @@ void Menu::Craft(ItemsReader &items, RecipesReader &recipes) {
         vector<vector<string>> recipe = r[x].getRecipe();
         int rows = r[x].getRows();
         int cols = r[x].getCols();
-        if (rows != this->getCraftingRows() || cols != this->getCraftingCols()) {
+        if (rows != this->getCraftingRows() ||
+            cols != this->getCraftingCols()) {
           continue;
         }
         /* Looping pada matrix c */
@@ -495,7 +494,7 @@ void Menu::Craft(ItemsReader &items, RecipesReader &recipes) {
         }
 
         if (recipeFound) {
-          ++ recipeCount;
+          ++recipeCount;
           this->decreaseCraftingByOne();
           give(items, r[x].getName(), r[x].getAmount());
         }
@@ -508,7 +507,8 @@ void Menu::Craft(ItemsReader &items, RecipesReader &recipes) {
   cout << "Check your inventory to see crafted items\n\n";
 }
 
-void Menu::CraftMirror(ItemsReader &items, RecipesReader &recipes, int recipeCount) {
+void Menu::CraftMirror(ItemsReader &items, RecipesReader &recipes,
+                       int recipeCount) {
   vector<Recipe> r = recipes.getRecipes();
   bool recipeFound = true;
   while (recipeFound) {
@@ -528,7 +528,8 @@ void Menu::CraftMirror(ItemsReader &items, RecipesReader &recipes, int recipeCou
           foundDifferent = false;
           for (int k = 0; k < rows && !foundDifferent; k++) {
             for (int l = 0; l < cols && !foundDifferent; l++) {
-              if (this->getElement(i + k, cols - l - 1 + j).first->getName() != "-") {
+              if (this->getElement(i + k, cols - l - 1 + j).first->getName() !=
+                  "-") {
                 string type = items.getType(
                     this->getElement(i + k, cols - l - 1 + j).first->getName());
                 if (type != "-") {
@@ -536,14 +537,12 @@ void Menu::CraftMirror(ItemsReader &items, RecipesReader &recipes, int recipeCou
                   foundDifferent = type != recipe[k][l];
                 } else {
                   /* Tidak ada tipenya */
-                  foundDifferent =
-                      this->getElement(i + k, cols - l - 1 + j).first->getName() !=
-                      recipe[k][l];
+                  foundDifferent = this->getElement(i + k, cols - l - 1 + j)
+                                       .first->getName() != recipe[k][l];
                 }
               } else {
-                foundDifferent =
-                    this->getElement(i + k, cols - l - 1 + j).first->getName() !=
-                    recipe[k][l];
+                foundDifferent = this->getElement(i + k, cols - l - 1 + j)
+                                     .first->getName() != recipe[k][l];
               }
             }
           }
@@ -554,7 +553,7 @@ void Menu::CraftMirror(ItemsReader &items, RecipesReader &recipes, int recipeCou
         }
       }
       if (recipeFound) {
-        ++ recipeCount;
+        ++recipeCount;
         this->decreaseCraftingByOne();
         give(items, r[x].getName(), r[x].getAmount());
       }
@@ -609,8 +608,8 @@ void Menu::emptyCrafting() {
 }
 
 void Menu::decreaseCraftingByOne() {
-  for (int i = 0; i < craftingCapacity; i ++) {
-    Item* craftElmt = getCraftElmtAtIdx(i);
+  for (int i = 0; i < craftingCapacity; i++) {
+    Item *craftElmt = getCraftElmtAtIdx(i);
     if (craftElmt->getName() != "-") {
       if (craftElmt->isNontool()) {
         craftElmt->addQuantity(-1);
