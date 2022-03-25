@@ -92,7 +92,7 @@ void Game::process(string command) {
       /* Pindahkan crafting ke inventory */
       string dest;
       cin >> dest;
-      this->menu->MoveFromCraft(slot, dest);
+      this->menu->MoveFromCraft(slot, N, dest);
     }
   } else if (command == "CRAFT") {
     this->menu->Craft(*items, *recipe);

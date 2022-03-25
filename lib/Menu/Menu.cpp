@@ -142,7 +142,7 @@ void Menu::MoveToCraft(
 }
 
 // move from crafting grid ke inventory
-void Menu::MoveFromCraft(string src, string dest) {
+void Menu::MoveFromCraft(string src, int n, string dest) {
   int i = checkId(src, "CRAFT");
   int j = checkId(dest, "INVENTORY");
   Item *s = getCraftElmtAtIdx(i);
@@ -156,10 +156,15 @@ void Menu::MoveFromCraft(string src, string dest) {
   if (d->getName() == "-") {
     // move nontool to dest
     if (s->isNontool()) {
+      // if trying to move more items than available
+      if(s->getQuantity() < n)
+      {
+        throw new NotEnoughItemException(s, n);
+      }
       setStorageAtIdx(
-          j, new Nontools(s->getId(), s->getName(), s->getCategory(), 1),
+          j, new Nontools(s->getId(), s->getName(), s->getCategory(), n),
           getStorageSlotName(j));
-      s->addQuantity(-1);
+      s->addQuantity(-n);
       // after remove if the qrt < 0 then remove
       if (s->getQuantity() <= 0) {
         setCraftingGridAtIdx(i, new Item(), getCraftSlotName(i));
@@ -167,6 +172,11 @@ void Menu::MoveFromCraft(string src, string dest) {
     }
     // source is tools
     else {
+      // if trying to move more items than available
+      if(n>1)
+      {
+        throw new NotEnoughItemException(s, n);
+      }
       setStorageAtIdx(j,
                       new Tools(s->getId(), s->getName(), s->getCategory(),
                                 s->getDurability()),
@@ -177,8 +187,18 @@ void Menu::MoveFromCraft(string src, string dest) {
   }
   // move the same item nontools
   else if (s->getId() == d->getId() && s->isNontool()) {
-    d->addQuantity(1);
-    s->addQuantity(-1);
+    // if trying to move more items than available
+    if(d->getQuantity() < n)
+    {
+      throw new NotEnoughItemException(s, n);
+    }
+    // if after move, slot is overloaded
+    if(n+d->getQuantity()>64)
+    {
+      throw new ItemStackOverflowException(d, n);
+    }
+    s->addQuantity(-n);
+    d->addQuantity(n);
     // if after remove qty <= 0 remove
     if (s->getQuantity() <= 0) {
       setCraftingGridAtIdx(i, new Item(), getCraftSlotName(i));
