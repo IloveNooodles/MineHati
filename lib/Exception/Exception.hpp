@@ -48,6 +48,18 @@ public:
   void what() { cout << this->command << " is an invalid command " << endl; }
 };
 
+class InvalidCommandArgsException : public BaseException {
+private:
+  string command;
+
+public:
+  InvalidCommandArgsException(string command) { this->command = command; }
+  void what() {
+    cout << "Command " << this->command << " failed due to invalid arguments"
+         << endl;
+  }
+};
+
 class FileNotFoundException : public BaseException {
 private:
   string fileName;

@@ -96,6 +96,9 @@ void Game::process(string command) {
       string slot;
       int N;
       cin >> slot >> N;
+      if (cin.fail()) {
+        throw new InvalidCommandArgsException(command);
+      }
       if (slot[0] == 'I') {
         vector<string> dest;
         for (int i = 0; i < N; i++) {
