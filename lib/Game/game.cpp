@@ -105,7 +105,7 @@ void Game::process(string command) {
       string slot;
       int N;
       cin >> slot >> N;
-      if(N <= 0)
+      if(N <= 0 || N > 64)
       {
         throw new InvalidNumberException(N);
       }
